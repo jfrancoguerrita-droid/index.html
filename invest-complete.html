@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@invest — Market Intelligence Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#050508;--bg2:#0c0c14;--bg3:#080810;--ac:#6366f1;--ac2:#38bdf8;--acd:#6366f115;--acb:#6366f130;--tx:#e2e8f0;--txm:#94a3b8;--txd:#475569;--txf:#334155;--br:#ffffff08;--br2:#ffffff06;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;min-height:100vh;}
+.page{display:none;min-height:100vh;}
+.fi{animation:fi .4s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.wrap{max-width:540px;margin:0 auto;padding:0 16px 60px;}
+.card{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:22px;margin-bottom:12px;}
+.badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:3px;color:var(--ac);background:var(--acd);border:1px solid var(--acb);padding:5px 14px;border-radius:99px;margin-bottom:12px;}
+.btn-p{width:100%;padding:15px;background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;border-radius:18px;color:#fff;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .2s,transform .1s;box-shadow:0 6px 24px #6366f125;margin-bottom:12px;}
+.btn-p:hover{opacity:.92;transform:translateY(-1px);}
+.w-center{text-align:center;padding:12px 0 24px;}
+.logo-ring{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#38bdf8);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;box-shadow:0 0 40px #6366f130;}
+.w-title{font-size:28px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;line-height:1.2;}
+.w-sub{font-size:13px;color:var(--txd);font-weight:500;max-width:380px;margin:0 auto 24px;line-height:1.7;}
+.disc{background:var(--bg2);border:1px solid var(--br2);border-left:3px solid var(--txf);border-radius:0 16px 16px 0;padding:14px 16px;font-size:12px;color:var(--txf);line-height:1.6;margin-bottom:24px;}
+.disc strong{color:var(--txd);}
+.truth-box{background:var(--bg3);border-left:3px solid var(--ac);border-radius:0 14px 14px 0;padding:14px 16px;margin-bottom:16px;}
+.truth-lbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--ac);margin-bottom:5px;}
+.truth-txt{font-size:13px;color:#818cf8;font-weight:500;line-height:1.7;}
+.warn-box{background:#1a100080;border:1px solid #facc1520;border-radius:12px;padding:12px 14px;font-size:12px;color:#92780a;line-height:1.6;margin-bottom:16px;}
+.qfb{margin-top:12px;font-size:12px;line-height:1.6;padding:10px 14px;border-radius:10px;display:none;}
+.qfb.show{display:block;}
+.qfb.good{background:#052e1680;color:#4ade80;}
+.qfb.bad{background:#1a080880;color:#f87171;}
+.qopt:hover{border-color:#6366f140;}
+.qopt.correct{background:#052e16;border-color:#22c55e50;color:#4ade80;}
+.qopt.wrong{background:#1a0808;border-color:#ef444430;color:#f87171;}
+.qopt.reveal{opacity:.35;}
+.c-green{color:#4ade80;}.c-blue{color:#38bdf8;}.c-purple{color:#a78bfa;}.c-yellow{color:#facc15;}
+.hidden{display:none;}
+
+/* ── TOOL TOPBAR ── */
+.tbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:50;}
+.tbar-back{background:none;border:none;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--txd);cursor:pointer;display:flex;align-items:center;gap:6px;transition:color .2s;padding:0;}
+.tbar-back:hover{color:var(--txm);}
+.tbar-lbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);}
+
+/* ══════════════════════════════
+   COVER
+══════════════════════════════ */
+#pg-cover{position:relative;overflow:hidden;}
+.cv-stage{width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;}
+.cv-globe{position:relative;width:300px;height:300px;}
+.cv-globe canvas{position:absolute;inset:0;width:300px;height:300px;}
+.cv-t{font-family:'Syne',sans-serif;font-size:clamp(52px,12vw,96px);font-weight:800;letter-spacing:-3px;color:#fff;text-align:center;margin-top:28px;line-height:1;animation:fi 1.2s .4s ease both;}
+.cv-s{font-size:clamp(10px,2vw,12px);font-weight:400;letter-spacing:6px;color:#2d3748;text-align:center;margin-top:10px;animation:fi 1.2s .7s ease both;}
+.cv-btn{margin-top:36px;padding:13px 32px;background:transparent;border:1px solid #ffffff15;border-radius:99px;color:#3d4f65;font-family:'Syne',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;cursor:pointer;transition:all .3s;animation:fi 1.2s 1s ease both;}
+.cv-btn:hover{border-color:#ffffff35;color:#7a8fa8;transform:translateY(-2px);}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(#ffffff03 1px,transparent 1px),linear-gradient(90deg,#ffffff03 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.vignette{position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 35%,#050508 100%);pointer-events:none;z-index:0;}
+.fdot{position:fixed;width:1px;height:1px;background:#fff;border-radius:50%;opacity:0;animation:fd linear infinite;pointer-events:none;}
+@keyframes fd{0%{opacity:0;transform:translateY(0)}10%{opacity:.3}90%{opacity:.05}100%{opacity:0;transform:translateY(-100vh)}}
+
+/* ══════════════════════════════
+   HUB
+══════════════════════════════ */
+.hub-nav{display:flex;align-items:center;justify-content:space-between;padding:24px 20px;max-width:540px;margin:0 auto;}
+.hub-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hub-logo span{-webkit-text-fill-color:var(--txf);color:var(--txf);font-weight:400;font-size:14px;margin-left:4px;}
+.hub-xbtn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--txd);text-decoration:none;padding:7px 14px;background:var(--bg2);border:1px solid var(--br);border-radius:99px;transition:all .2s;}
+.hub-xbtn:hover{border-color:var(--acb);color:var(--txm);}
+.hub-xbtn svg{width:13px;height:13px;fill:currentColor;}
+.ndiv{height:1px;background:linear-gradient(90deg,transparent,var(--br),transparent);max-width:540px;margin:0 auto;}
+.hero{text-align:center;padding:48px 0 40px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:3px;color:var(--ac);background:var(--acd);border:1px solid var(--acb);padding:5px 14px;border-radius:99px;margin-bottom:20px;}
+.hero-badge::before{content:'';width:5px;height:5px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--ac);}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(28px,6vw,42px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px;}
+.hero-title .l1{display:block;background:linear-gradient(135deg,#c7d2fe 30%,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-title .l2{display:block;color:var(--txf);font-size:.65em;letter-spacing:-.5px;margin-top:4px;-webkit-text-fill-color:var(--txf);}
+.hero-sub{font-size:14px;color:var(--txd);line-height:1.8;max-width:400px;margin:0 auto;font-weight:500;}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--txf);margin-bottom:14px;padding-left:2px;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px;}
+.tcrd{background:var(--bg2);border:1px solid var(--br);border-radius:22px;padding:22px;cursor:pointer;display:block;transition:all .25s;position:relative;overflow:hidden;text-decoration:none;}
+.tcrd::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#6366f140,transparent);opacity:0;transition:opacity .3s;}
+.tcrd:hover{border-color:var(--acb);transform:translateY(-3px);box-shadow:0 12px 40px #6366f110;}
+.tcrd:hover::before{opacity:1;}
+.tcrd.full{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;}
+.tico{width:44px;height:44px;border-radius:14px;background:var(--bg3);border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;flex-shrink:0;}
+.tcrd.full .tico{width:52px;height:52px;border-radius:16px;font-size:24px;margin-bottom:0;background:linear-gradient(135deg,#6366f115,#38bdf808);border-color:var(--acb);}
+.tname{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;letter-spacing:-.3px;}
+.tcrd.full .tname{font-size:17px;}
+.tdesc{font-size:12px;color:var(--txd);line-height:1.6;font-weight:500;}
+.ttag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 9px;border-radius:99px;margin-top:12px;}
+.tag-free{background:#052e1680;color:#4ade80;border:1px solid #22c55e25;}
+.tag-new{background:#6366f115;color:#818cf8;border:1px solid #6366f130;}
+.tag-soon{background:#1a1a1a;color:#334155;border:1px solid #334155;}
+.cprow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.cpmini{background:var(--bg2);border:1px solid var(--br);border-radius:16px;padding:16px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:12px;}
+.cpmini:hover{border-color:var(--acb);background:#0f0f1a;}
+.cpltr{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;width:26px;height:26px;min-width:26px;border-radius:8px;background:var(--bg3);border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;color:var(--txf);}
+.cpterm{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:2px;}
+.cpbrief{font-size:11px;color:var(--txd);line-height:1.5;font-weight:500;}
+.see-all{display:flex;align-items:center;justify-content:center;gap:6px;padding:13px;background:transparent;border:1px solid var(--br);border-radius:14px;font-size:12px;font-weight:600;color:var(--txd);cursor:pointer;transition:all .2s;width:100%;font-family:'Inter',sans-serif;}
+.see-all:hover{border-color:var(--acb);color:var(--txm);}
+.ecrd{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:28px;text-align:center;position:relative;overflow:hidden;margin-bottom:40px;}
+.ecrd::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:1px;background:linear-gradient(90deg,transparent,#6366f150,transparent);}
+.etitle{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.esub{font-size:13px;color:var(--txd);line-height:1.7;margin-bottom:20px;font-weight:500;}
+.erow{display:flex;gap:8px;}
+.einput{flex:1;padding:13px 16px;background:var(--bg3);border:1px solid var(--br);border-radius:14px;color:var(--tx);font-size:13px;font-family:'Inter',sans-serif;font-weight:500;outline:none;transition:border .2s;}
+.einput::placeholder{color:var(--txf);}
+.einput:focus{border-color:var(--acb);}
+.ebtn{padding:13px 20px;background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;border-radius:14px;color:#fff;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;transition:opacity .2s,transform .15s;box-shadow:0 6px 24px #6366f130;}
+.ebtn:hover{opacity:.9;transform:translateY(-1px);}
+.enote{font-size:10px;color:var(--txf);margin-top:10px;font-weight:500;}
+.esucc{display:none;text-align:center;padding:12px;color:#4ade80;font-size:13px;font-weight:600;}
+.hfooter{text-align:center;padding:20px;font-size:11px;color:var(--txf);font-weight:500;}
+.hfooter a{color:var(--txd);text-decoration:none;}
+
+/* ══════════════════════════════
+   LIBRARY
+══════════════════════════════ */
+.lib-search{width:100%;padding:13px 16px;background:var(--bg2);border:1px solid var(--br);border-radius:16px;color:var(--tx);font-size:14px;font-family:'Inter',sans-serif;font-weight:500;outline:none;transition:border .2s;margin-bottom:8px;}
+.lib-search::placeholder{color:var(--txf);}
+.lib-search:focus{border-color:var(--acb);}
+.ftabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.ftab{padding:6px 14px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--br);background:var(--bg2);color:var(--txf);transition:all .2s;}
+.ftab.active{background:var(--ac);border-color:var(--ac);color:#fff;}
+.lgrid{display:flex;flex-direction:column;gap:8px;}
+.litem{background:var(--bg2);border:1px solid var(--br);border-radius:16px;padding:16px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;}
+.litem:hover{border-color:var(--acb);background:#0f0f1a;}
+.lltr{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;width:32px;height:32px;min-width:32px;border-radius:10px;background:var(--bg3);border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;color:var(--txf);}
+.linfo{flex:1;}
+.lterm{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:2px;}
+.lbrief{font-size:12px;color:var(--txd);font-weight:500;}
+.lcat{font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:99px;white-space:nowrap;}
+.cat-macro{background:#1a1a2e80;color:#818cf8;border:1px solid #6366f130;}
+.cat-crypto{background:#052e1680;color:#4ade80;border:1px solid #22c55e25;}
+.cat-basics{background:#1a0f0080;color:#facc15;border:1px solid #eab30830;}
+.cat-analysis{background:#1a080080;color:#fb923c;border:1px solid #f9731625;}
+.no-res{text-align:center;padding:40px 20px;color:var(--txf);font-size:13px;}
+
+/* MODAL */
+.movl{display:none;position:fixed;inset:0;background:#00000090;backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.movl.show{display:flex;}
+.mbox{background:var(--bg2);border:1px solid var(--acb);border-radius:28px;padding:28px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;animation:fi .3s ease;}
+.mhead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.mterm{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.mcatb{display:inline-block;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--ac);background:var(--acd);border:1px solid var(--acb);padding:3px 10px;border-radius:99px;}
+.mclose{width:30px;height:30px;background:var(--bg3);border:1px solid var(--br);border-radius:99px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txd);font-size:16px;flex-shrink:0;transition:all .2s;font-family:'Inter',sans-serif;}
+.mclose:hover{border-color:var(--acb);color:var(--tx);}
+.msimple{background:var(--bg3);border:1px solid var(--br2);border-left:3px solid var(--ac);border-radius:0 14px 14px 0;padding:14px 16px;margin-bottom:16px;}
+.mslbl{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:5px;}
+.mstxt{font-size:14px;font-weight:600;color:var(--tx);line-height:1.6;}
+.mftxt{font-size:13px;color:var(--txd);line-height:1.8;font-weight:500;margin-bottom:16px;}
+.mex{background:var(--bg3);border:1px solid var(--br2);border-radius:14px;padding:14px 16px;}
+.mexlbl{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:5px;}
+.mextxt{font-size:12px;color:var(--txm);line-height:1.7;font-weight:500;}
+
+/* ══════════════════════════════
+   SIMULATOR
+══════════════════════════════ */
+#pg-sim .swrap{max-width:520px;margin:0 auto;padding:0 16px 60px;}
+#pg-sim .field{margin-bottom:14px;}
+#pg-sim .field:last-child{margin-bottom:0;}
+#pg-sim label{font-size:11px;font-weight:600;color:var(--txd);display:block;margin-bottom:5px;letter-spacing:.3px;}
+#pg-sim .iwrap{position:relative;}
+#pg-sim .pfx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--txf);font-size:13px;font-weight:700;pointer-events:none;}
+#pg-sim .sfx{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--txf);font-size:13px;font-weight:700;pointer-events:none;}
+#pg-sim input[type=number]{width:100%;padding:12px 32px;background:var(--bg3);border:1px solid var(--br);border-radius:14px;color:var(--tx);font-size:15px;font-weight:600;font-family:'Inter',sans-serif;outline:none;transition:border .2s,box-shadow .2s;-moz-appearance:textfield;}
+#pg-sim input[type=number]::-webkit-outer-spin-button,#pg-sim input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+#pg-sim input[type=number]:focus{border-color:#6366f140;box-shadow:0 0 0 3px #6366f110;}
+#pg-sim .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+#pg-sim .sldwrap{margin-top:6px;}
+#pg-sim .sldhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+#pg-sim .sldpct{font-size:22px;font-weight:900;color:#818cf8;}
+#pg-sim input[type=range]{width:100%;height:4px;-webkit-appearance:none;border-radius:99px;cursor:pointer;outline:none;}
+#pg-sim input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#818cf8;border-radius:50%;border:3px solid #050508;box-shadow:0 0 8px #6366f150;}
+#pg-sim .results{display:none;}
+#pg-sim .results.show{display:block;}
+#pg-sim .rh{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:28px;text-align:center;margin-bottom:12px;position:relative;overflow:hidden;}
+#pg-sim .rh::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:linear-gradient(90deg,transparent,#6366f160,transparent);}
+#pg-sim .rhlbl{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);margin-bottom:6px;}
+#pg-sim .rhnum{font-size:52px;font-weight:900;color:#c7d2fe;line-height:1;letter-spacing:-2px;}
+#pg-sim .rhsub{font-size:12px;color:var(--txf);margin-top:6px;}
+#pg-sim .sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+#pg-sim .sstat{background:var(--bg2);border:1px solid var(--br);border-radius:20px;padding:16px;}
+#pg-sim .sslbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--txf);margin-bottom:5px;}
+#pg-sim .ssval{font-size:17px;font-weight:800;}
+#pg-sim .ccrd{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:20px;margin-bottom:12px;}
+#pg-sim .ccrd canvas{width:100%;}
+#pg-sim .chdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
+#pg-sim .ctitle{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);}
+#pg-sim .legend{display:flex;gap:14px;align-items:center;}
+#pg-sim .legit{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--txd);font-weight:600;}
+#pg-sim .legdot{width:8px;height:8px;border-radius:50%;}
+#pg-sim .milcrd{background:var(--bg2);border:1px solid var(--br);border-radius:20px;padding:18px;margin-bottom:12px;}
+#pg-sim .miltit{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);margin-bottom:14px;}
+#pg-sim .milrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #ffffff05;}
+#pg-sim .milrow:last-child{border-bottom:none;}
+#pg-sim .milyr{font-size:12px;color:var(--txd);font-weight:600;}
+#pg-sim .milval{font-size:14px;font-weight:800;color:#c7d2fe;}
+#pg-sim .milgn{font-size:11px;color:#4ade80;font-weight:600;}
+#pg-sim .tip{background:var(--bg2);border:1px solid var(--br);border-left:3px solid var(--ac);border-radius:0 20px 20px 0;padding:16px 18px;font-size:13px;color:#64748b;line-height:1.7;}
+#pg-sim .tip strong{color:#818cf8;}
+#pg-sim .steps{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+#pg-sim .step{display:flex;align-items:flex-start;gap:14px;background:var(--bg2);border:1px solid var(--br);border-radius:20px;padding:16px 18px;}
+#pg-sim .stepn{min-width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;box-shadow:0 4px 12px #6366f130;}
+#pg-sim .stept{font-size:13px;font-weight:700;color:#c7d2fe;margin-bottom:2px;}
+#pg-sim .stepd{font-size:12px;color:var(--txd);font-weight:500;line-height:1.5;}
+#pg-sim h1{font-size:24px;font-weight:900;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;}
+#pg-sim .shdr{text-align:center;margin-bottom:28px;}
+#pg-sim .ssub{color:var(--txf);font-size:13px;font-weight:500;}
+
+/* ══════════════════════════════
+   CANDLESTICK
+══════════════════════════════ */
+#pg-cp .pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+#pg-cp .pcrd{background:var(--bg2);border:1px solid var(--br);border-radius:18px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+#pg-cp .pcrd:hover{border-color:#6366f140;transform:translateY(-2px);}
+#pg-cp .pname{font-size:11px;font-weight:700;color:#94a3b8;margin-top:8px;line-height:1.3;}
+#pg-cp .psig{font-size:9px;font-weight:700;letter-spacing:1px;margin-top:4px;padding:2px 8px;border-radius:99px;display:inline-block;}
+#pg-cp .bull{background:#052e1680;color:#4ade80;border:1px solid #22c55e30;}
+#pg-cp .bear{background:#2d0a0a80;color:#f87171;border:1px solid #ef444430;}
+#pg-cp .neut{background:#1a1a2e80;color:#818cf8;border:1px solid #6366f130;}
+#pg-cp .backbtn{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--txd);cursor:pointer;margin-bottom:20px;transition:color .2s;background:none;border:none;font-family:'Inter',sans-serif;}
+#pg-cp .backbtn:hover{color:#94a3b8;}
+#pg-cp .dcrd{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:24px;margin-bottom:12px;}
+#pg-cp .dtitle{font-size:22px;font-weight:900;color:#c7d2fe;}
+#pg-cp .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+#pg-cp .dtype{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:16px;}
+#pg-cp .cwrap{display:flex;justify-content:center;background:var(--bg3);border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid var(--br2);}
+#pg-cp .irow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+#pg-cp .ibox{background:var(--bg3);border:1px solid var(--br2);border-radius:14px;padding:14px;}
+#pg-cp .ilbl{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:5px;}
+#pg-cp .ival{font-size:13px;font-weight:700;}
+#pg-cp .rbg{height:5px;background:#0d0d1a;border-radius:99px;overflow:hidden;margin-top:5px;}
+#pg-cp .rfil{height:100%;border-radius:99px;}
+#pg-cp .conds{margin-bottom:16px;}
+#pg-cp .condlbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:10px;}
+#pg-cp .condrow{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;}
+#pg-cp .conddot{width:6px;height:6px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0;}
+#pg-cp .condtxt{font-size:12px;color:var(--txd);line-height:1.5;}
+#pg-cp .qsec{background:var(--bg2);border:1px solid var(--br);border-radius:20px;padding:20px;margin-bottom:12px;}
+#pg-cp .qlbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:12px;}
+#pg-cp .qcwrap{display:flex;justify-content:center;background:var(--bg3);border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid var(--br2);}
+#pg-cp .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+#pg-cp .qopt{background:var(--bg3);border:1px solid var(--br);border-radius:12px;padding:12px;font-size:12px;color:#64748b;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;font-weight:600;}
+#pg-cp .cptabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+#pg-cp .cptab{padding:6px 14px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--br);background:var(--bg2);color:var(--txf);transition:all .2s;}
+#pg-cp .cptab.active{background:var(--ac);border-color:var(--ac);color:#fff;}
+#pg-cp .ibox-intro{background:var(--bg2);border:1px solid var(--br);border-radius:20px;padding:18px;margin-bottom:20px;}
+
+/* ══════════════════════════════
+   PLAYBOOK
+══════════════════════════════ */
+#pg-pa .ppills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px;}
+#pg-pa .ppill{background:var(--bg2);border:1px solid var(--br);border-radius:99px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--txf);}
+#pg-pa .ppill span{color:var(--ac);margin-right:4px;}
+#pg-pa .progwrap{margin-bottom:20px;}
+#pg-pa .progtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+#pg-pa .proglbl{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--txf);}
+#pg-pa .progpct{font-size:12px;font-weight:700;color:var(--ac);}
+#pg-pa .progbg{height:4px;background:var(--bg2);border-radius:99px;overflow:hidden;}
+#pg-pa .progfil{height:100%;background:linear-gradient(90deg,#6366f1,#38bdf8);border-radius:99px;transition:width .5s ease;}
+#pg-pa .modcrd{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:24px;margin-bottom:12px;}
+#pg-pa .modnum{font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--ac);margin-bottom:6px;}
+#pg-pa .modtit{font-size:20px;font-weight:900;color:#c7d2fe;margin-bottom:14px;line-height:1.3;}
+#pg-pa .modbod{font-size:13px;color:#64748b;line-height:1.9;margin-bottom:16px;}
+#pg-pa .modbod p{margin-bottom:10px;}
+#pg-pa .cvwrap{background:var(--bg3);border:1px solid var(--br2);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;align-items:center;}
+#pg-pa .cvlbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:10px;align-self:flex-start;}
+#pg-pa .rwrap{margin-bottom:16px;}
+#pg-pa .rlbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:10px;}
+#pg-pa .rrow{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+#pg-pa .rnum{min-width:22px;height:22px;border-radius:50%;background:#6366f120;border:1px solid #6366f130;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--ac);flex-shrink:0;}
+#pg-pa .rtxt{font-size:12px;color:var(--txd);line-height:1.6;}
+#pg-pa .qwrap{background:var(--bg3);border:1px solid var(--br2);border-radius:16px;padding:18px;}
+#pg-pa .qwlbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:12px;}
+#pg-pa .qwopts{display:flex;flex-direction:column;gap:8px;}
+#pg-pa .qopt{background:var(--bg2);border:1px solid var(--br);border-radius:12px;padding:12px 14px;font-size:12px;color:#64748b;cursor:pointer;transition:all .2s;text-align:left;font-family:'Inter',sans-serif;font-weight:500;width:100%;}
+#pg-pa .panav{display:flex;gap:10px;margin-top:4px;}
+#pg-pa .btnav{flex:1;padding:14px;border:none;border-radius:16px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;}
+#pg-pa .bprev{background:var(--bg2);border:1px solid var(--br);color:var(--txd);}
+#pg-pa .bnext{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;box-shadow:0 6px 20px #6366f125;}
+#pg-pa .sumcrd{background:var(--bg2);border:1px solid var(--br);border-radius:24px;padding:24px;margin-bottom:12px;}
+#pg-pa .scring{width:90px;height:90px;border-radius:50%;margin:0 auto 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;font-weight:900;border:3px solid var(--ac);background:#6366f110;color:#c7d2fe;}
+#pg-pa .sclbl{font-size:10px;color:var(--ac);font-weight:700;letter-spacing:1px;}
+#pg-pa .srrow{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #ffffff05;}
+#pg-pa .srrow:last-child{border-bottom:none;}
+#pg-pa .sricon{font-size:18px;flex-shrink:0;margin-top:2px;}
+#pg-pa .srtit{font-size:13px;font-weight:700;color:#c7d2fe;margin-bottom:3px;}
+#pg-pa .srdesc{font-size:11px;color:var(--txf);line-height:1.5;}
+
+@media(max-width:480px){
+  .tgrid{grid-template-columns:1fr;}
+  .tcrd.full{grid-template-columns:1fr;}
+  .tcrd.full .tico{margin-bottom:12px;}
+  .cprow{grid-template-columns:1fr;}
+  .erow{flex-direction:column;}
+  #pg-cp .pgrid{grid-template-columns:1fr 1fr;}
+  #pg-cp .qopts{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PAGE: COVER
+══════════════════════════════════════════ -->
+<div id="pg-cover" class="page" style="display:block;">
+  <div class="bg-grid"></div>
+  <div class="vignette"></div>
+  <div class="fdot" style="left:12%;top:82%;animation-duration:13s;animation-delay:0s"></div>
+  <div class="fdot" style="left:30%;top:90%;animation-duration:9s;animation-delay:2s"></div>
+  <div class="fdot" style="left:52%;top:87%;animation-duration:14s;animation-delay:1s"></div>
+  <div class="fdot" style="left:70%;top:84%;animation-duration:11s;animation-delay:3s"></div>
+  <div class="fdot" style="left:88%;top:91%;animation-duration:10s;animation-delay:.5s"></div>
+  <div class="cv-stage">
+    <div class="cv-globe" aria-hidden="true">
+      <canvas id="cv-whirl" width="600" height="600"></canvas>
+      <canvas id="cv-globe" width="600" height="600"></canvas>
+    </div>
+    <div class="cv-t">INVEST</div>
+    <div class="cv-s">MARKET INTELLIGENCE</div>
+    <button class="cv-btn" onclick="nav('hub')">ENTER →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: HUB
+══════════════════════════════════════════ -->
+<div id="pg-hub" class="page">
+  <nav class="hub-nav">
+    <div class="hub-logo">@invest <span>hub</span></div>
+    <a href="https://x.com/invest" target="_blank" class="hub-xbtn">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      @invest
+    </a>
+  </nav>
+  <div class="ndiv"></div>
+  <div class="wrap">
+    <div class="hero fi">
+      <div class="hero-badge">MARKET INTELLIGENCE</div>
+      <h1 class="hero-title"><span class="l1">Free tools for every investor.</span><span class="l2">No jargon. No noise. Just clarity.</span></h1>
+      <p class="hero-sub">Everything here is free. Built for people who want to understand markets, not just follow them.</p>
+    </div>
+    <div class="sec-lbl">TOOLS</div>
+    <div class="tgrid fi">
+      <div class="tcrd full" onclick="nav('sim')">
+        <div class="tico">📈</div>
+        <div>
+          <div class="tname">Compound Interest Simulator</div>
+          <div class="tdesc">See how your money grows over time. Adjust capital, rate, and time. Understand the real math behind long-term investing.</div>
+          <span class="ttag tag-free">FREE</span>
+        </div>
+      </div>
+      <div class="tcrd" onclick="nav('cp')">
+        <div class="tico">🕯️</div>
+        <div class="tname">Candlestick Patterns</div>
+        <div class="tdesc">Visual guide to every major pattern. What it means, when it appears, what it signals.</div>
+        <span class="ttag tag-free">FREE</span>
+      </div>
+      <div class="tcrd" onclick="nav('pa')">
+        <div class="tico">📊</div>
+        <div class="tname">Price Action Playbook</div>
+        <div class="tdesc">6 core concepts every trader must master. With quizzes and visual examples.</div>
+        <span class="ttag tag-free">FREE</span>
+      </div>
+      <div class="tcrd" onclick="nav('lib')">
+        <div class="tico">📚</div>
+        <div class="tname">Concept Library</div>
+        <div class="tdesc">40+ financial terms explained in plain language. No background required.</div>
+        <span class="ttag tag-new">NEW</span>
+      </div>
+      <div class="tcrd" style="opacity:.5;cursor:default;">
+        <div class="tico">🧠</div>
+        <div class="tname">Investor Quiz</div>
+        <div class="tdesc">Discover what type of investor you are. 8 questions, honest results.</div>
+        <span class="ttag tag-soon">SOON</span>
+      </div>
+    </div>
+    <div class="sec-lbl">FROM THE LIBRARY</div>
+    <div class="cprow fi" id="hub-concepts"></div>
+    <button class="see-all" onclick="nav('lib')">View all concepts →</button>
+    <div style="margin-bottom:28px;"></div>
+    <div class="ecrd fi">
+      <div style="font-size:28px;margin-bottom:12px;">📬</div>
+      <div class="etitle">Weekly Market Analysis</div>
+      <p class="esub">One email per week. What happened, what it means, what to watch next.<br>No spam. No hype. Written like @invest posts.</p>
+      <div class="erow">
+        <input class="einput" type="email" placeholder="your@email.com" id="hub-email">
+        <button class="ebtn" onclick="subEmail()">Subscribe</button>
+      </div>
+      <div class="esucc" id="hub-esucc">✓ You're in. First analysis lands this week.</div>
+      <div class="enote">Free forever. Unsubscribe anytime.</div>
+    </div>
+  </div>
+  <div class="hfooter">Built by <a href="https://x.com/invest" target="_blank">@invest</a> · Free for everyone · Not financial advice</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: LIBRARY
+══════════════════════════════════════════ -->
+<div id="pg-lib" class="page">
+  <div class="tbar">
+    <button class="tbar-back" onclick="nav('hub')">← Hub</button>
+    <div class="tbar-lbl">CONCEPT LIBRARY</div>
+  </div>
+  <div class="wrap">
+    <div style="margin-bottom:24px;padding-top:20px;">
+      <h2 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;">40+ terms explained simply.</h2>
+      <p style="font-size:13px;color:var(--txd);font-weight:500;line-height:1.7;">If you've ever read a financial headline and had no idea what it meant, start here.</p>
+    </div>
+    <input class="lib-search" type="text" placeholder="Search a term..." id="lib-search" oninput="filterLib()">
+    <div class="ftabs" id="lib-ftabs">
+      <div class="ftab active" onclick="setLibFilter('all',this)">All</div>
+      <div class="ftab" onclick="setLibFilter('basics',this)">Basics</div>
+      <div class="ftab" onclick="setLibFilter('macro',this)">Macro</div>
+      <div class="ftab" onclick="setLibFilter('crypto',this)">Crypto</div>
+      <div class="ftab" onclick="setLibFilter('analysis',this)">Analysis</div>
+    </div>
+    <div class="lgrid" id="lib-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: SIMULATOR
+══════════════════════════════════════════ -->
+<div id="pg-sim" class="page">
+  <div class="tbar">
+    <button class="tbar-back" onclick="nav('hub')">← Hub</button>
+    <div class="tbar-lbl">SIMULATOR</div>
+  </div>
+  <div class="swrap">
+    <div id="sim-welcome" class="fi" style="padding-top:20px;">
+      <div class="w-center">
+        <div class="logo-ring">📈</div>
+        <div class="badge">FREE TOOL</div>
+        <h2 class="w-title">Compound Interest<br>Simulator</h2>
+        <p class="w-sub">See exactly how much your money grows over time. The most powerful force in investing — visualized in seconds.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="stepn">1</div><div><div class="stept">Enter your starting capital</div><div class="stepd">How much you're investing today. Even small amounts make a huge difference over time.</div></div></div>
+        <div class="step"><div class="stepn">2</div><div><div class="stept">Set your monthly contribution</div><div class="stepd">How much you'll add every month. This is where real wealth is built consistently.</div></div></div>
+        <div class="step"><div class="stepn">3</div><div><div class="stept">Watch the curve</div><div class="stepd">See your money grow exponentially with a live chart showing total value vs what you actually invested.</div></div></div>
+      </div>
+      <div class="disc"><strong>⚠️ Disclaimer:</strong> This simulator uses fixed annual return assumptions. Real returns vary and are not guaranteed. Educational purposes only.</div>
+      <button class="btn-p" onclick="simEnter()">Run the Simulation →</button>
+    </div>
+    <div id="sim-app" style="display:none;">
+      <div class="shdr"><div class="badge">WEALTH SIMULATOR</div><h1>Compound Interest</h1><p class="ssub">Time is your most valuable asset.</p></div>
+      <div class="card"><div style="font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);margin-bottom:18px;">YOUR INVESTMENT</div>
+        <div class="g2">
+          <div class="field"><label>Initial Capital</label><div class="iwrap"><span class="pfx">$</span><input type="number" id="sim-init" placeholder="5000" min="0"></div></div>
+          <div class="field"><label>Monthly Contribution</label><div class="iwrap"><span class="pfx">$</span><input type="number" id="sim-mo" placeholder="200" min="0"></div></div>
+        </div>
+        <div class="field"><label>Investment Period (years)</label><div class="iwrap"><input type="number" id="sim-yrs" placeholder="20" min="1" max="50" style="padding:12px 32px 12px 14px;"><span class="sfx">yr</span></div></div>
+      </div>
+      <div class="card"><div style="font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);margin-bottom:6px;">ANNUAL RETURN</div>
+        <div class="sldwrap"><div class="sldhead"><span style="font-size:12px;color:var(--txd);font-weight:500">S&P 500 avg: ~10%</span><span class="sldpct" id="sim-rdisp">8.0%</span></div>
+        <input type="range" id="sim-rate" min="1" max="30" step="0.5" value="8" oninput="simSlider(this)"></div>
+      </div>
+      <button class="btn-p" onclick="simRun()">Simulate Growth →</button>
+      <div class="results" id="sim-results">
+        <div class="rh"><div class="rhlbl">FINAL PORTFOLIO VALUE</div><div class="rhnum" id="sim-fval">—</div><div class="rhsub" id="sim-fsub"></div></div>
+        <div class="sgrid">
+          <div class="sstat"><div class="sslbl">TOTAL INVESTED</div><div class="ssval c-blue" id="sim-inv">—</div></div>
+          <div class="sstat"><div class="sslbl">INTEREST EARNED</div><div class="ssval c-green" id="sim-int">—</div></div>
+          <div class="sstat"><div class="sslbl">MULTIPLIED</div><div class="ssval c-purple" id="sim-mul">—</div></div>
+        </div>
+        <div class="ccrd"><div class="chdr"><div class="ctitle">GROWTH CURVE</div><div class="legend"><div class="legit"><div class="legdot" style="background:#4ade80"></div>Total</div><div class="legit"><div class="legdot" style="background:#334155"></div>Invested</div></div></div><canvas id="sim-chart" height="180"></canvas></div>
+        <div class="milcrd"><div class="miltit">MILESTONES</div><div id="sim-miles"></div></div>
+        <div class="tip" id="sim-tip"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: CANDLESTICK
+══════════════════════════════════════════ -->
+<div id="pg-cp" class="page">
+  <div class="tbar">
+    <button class="tbar-back" onclick="nav('hub')">← Hub</button>
+    <div class="tbar-lbl">CANDLESTICK PATTERNS</div>
+  </div>
+  <div class="wrap" style="padding-top:20px;">
+    <div id="cp-welcome" class="fi">
+      <div class="w-center">
+        <div class="logo-ring">🕯️</div>
+        <div class="badge">PATTERN LIBRARY</div>
+        <h2 class="w-title">Candlestick<br>Pattern Library</h2>
+        <p class="w-sub">Learn to read price action through candlestick patterns. Each pattern is drawn exactly as it appears on a real chart — with context, reliability scores, and a quiz.</p>
+      </div>
+      <div class="ibox-intro">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;color:var(--txf);margin-bottom:12px;">WHAT IS A CANDLESTICK?</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <canvas id="cp-intro" width="60" height="100"></canvas>
+          <div style="font-size:12px;color:var(--txd);line-height:1.8;">Each candle shows <strong style="color:#94a3b8;">4 prices</strong> in a period:<br>🔼 <strong style="color:#94a3b8;">High</strong> — top of wick<br>🔽 <strong style="color:#94a3b8;">Low</strong> — bottom of wick<br>🟢 <strong style="color:#4ade80;">Open/Close</strong> — the body<br>Green = price went up · Red = went down</div>
+        </div>
+      </div>
+      <div class="disc"><strong>⚠️ Note:</strong> Patterns are tools, not guarantees. Always confirm with volume and context.</div>
+      <button class="btn-p" onclick="cpGallery('all')">Explore Patterns →</button>
+    </div>
+    <div id="cp-gallery" style="display:none;"></div>
+    <div id="cp-detail" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: PRICE ACTION PLAYBOOK
+══════════════════════════════════════════ -->
+<div id="pg-pa" class="page">
+  <div class="tbar">
+    <button class="tbar-back" onclick="nav('hub')">← Hub</button>
+    <div class="tbar-lbl">PRICE ACTION</div>
+  </div>
+  <div class="wrap" style="padding-top:20px;">
+    <div id="pa-welcome" class="fi">
+      <div class="w-center">
+        <div class="logo-ring">📐</div>
+        <div class="badge">PRICE ACTION PLAYBOOK</div>
+        <h2 class="w-title">Read the Market.<br>No Indicators Needed.</h2>
+        <p class="w-sub">Price Action is the skill of reading what the market is doing directly from the chart. This playbook covers the core concepts every serious trader must master.</p>
+      </div>
+      <div class="ppills">
+        <div class="ppill"><span>01</span>Support &amp; Resistance</div>
+        <div class="ppill"><span>02</span>Market Structure</div>
+        <div class="ppill"><span>03</span>Trend Analysis</div>
+        <div class="ppill"><span>04</span>Break &amp; Retest</div>
+        <div class="ppill"><span>05</span>Entry Refinement</div>
+        <div class="ppill"><span>06</span>Stop Loss Placement</div>
+      </div>
+      <div class="disc">⚠️ Price Action concepts increase probability — they do not guarantee outcomes. Always manage risk.</div>
+      <button class="btn-p" id="pa-start">Start Playbook →</button>
+    </div>
+    <div id="pa-play" class="hidden">
+      <div class="progwrap"><div class="progtop"><div class="proglbl">PRICE ACTION PLAYBOOK</div><div class="progpct" id="pa-pct">0%</div></div><div class="progbg"><div class="progfil" id="pa-pfil" style="width:0%"></div></div></div>
+      <div id="pa-modwrap"></div>
+      <div class="panav"><button class="btnav bprev" id="pa-prev">← Back</button><button class="btnav bnext" id="pa-next">Next →</button></div>
+    </div>
+    <div id="pa-summary" class="hidden"></div>
+  </div>
+</div>
+
+<!-- CONCEPT MODAL -->
+<div class="movl" id="modal" onclick="modalClose(event)">
+  <div class="mbox">
+    <div class="mhead"><div><div class="mterm" id="m-term"></div><span class="mcatb" id="m-cat"></span></div><button class="mclose" onclick="modalCloseDirect()">×</button></div>
+    <div class="msimple"><div class="mslbl">IN PLAIN LANGUAGE</div><div class="mstxt" id="m-simple"></div></div>
+    <div class="mftxt" id="m-full"></div>
+    <div class="mex"><div class="mexlbl">EXAMPLE</div><div class="mextxt" id="m-ex"></div></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   ROUTER
+══════════════════════════════════════ */
+const PAGES = ['pg-cover','pg-hub','pg-lib','pg-sim','pg-cp','pg-pa'];
+function nav(id) {
+  PAGES.forEach(p => document.getElementById(p).style.display = 'none');
+  const map = {cover:'pg-cover',hub:'pg-hub',lib:'pg-lib',sim:'pg-sim',cp:'pg-cp',pa:'pg-pa'};
+  document.getElementById(map[id]).style.display = 'block';
+  window.scrollTo(0,0);
+  if (id === 'cover' && !globeReady) initGlobe();
+  if (id === 'cp' && !cpReady) { cpReady = true; setTimeout(cpDrawIntro, 80); }
+  if (id === 'lib') renderLib();
+  if (id === 'hub') renderHubConcepts();
+}
+
+/* ══════════════════════════════════════
+   GLOBE
+══════════════════════════════════════ */
+let globeReady = false;
+function initGlobe() {
+  globeReady = true;
+  const gC = document.getElementById('cv-globe');
+  const wC = document.getElementById('cv-whirl');
+  const g = gC.getContext('2d'), w = wC.getContext('2d');
+  const SZ=600,CX=300,CY=300,R=200;
+  function xy(lat,lon,rot){
+    const φ=lat*Math.PI/180,λ=(lon+rot)*Math.PI/180;
+    const x=Math.cos(φ)*Math.sin(λ),y=Math.sin(φ),z=Math.cos(φ)*Math.cos(λ);
+    return{x:CX+R*x,y:CY-R*y,v:z>0};
+  }
+  function dline(pts){let s=false;for(const p of pts){if(!p.v){s=false;continue;}if(!s){g.moveTo(p.x,p.y);s=true;}else g.lineTo(p.x,p.y);}}
+  const CONTS=[
+    [[70,-140],[60,-140],[50,-130],[45,-124],[35,-120],[25,-110],[15,-92],[8,-77],[12,-83],[22,-90],[32,-81],[40,-74],[45,-64],[55,-60],[65,-68],[70,-80],[70,-110],[70,-140]],
+    [[10,-75],[0,-80],[-18,-70],[-34,-53],[-55,-65],[-55,-67],[-42,-62],[-22,-43],[-10,-37],[0,-50],[5,-52],[10,-63],[10,-75]],
+    [[36,5],[43,-9],[51,2],[56,8],[70,18],[70,28],[65,26],[55,21],[50,14],[46,13],[40,18],[37,8],[36,5]],
+    [[37,10],[32,32],[15,42],[2,40],[-10,35],[-35,27],[-35,20],[-34,26],[-17,12],[0,10],[4,-5],[10,-15],[25,-15],[37,10]],
+    [[70,30],[70,140],[55,140],[40,125],[25,120],[10,105],[1,104],[12,100],[25,91],[35,76],[38,68],[32,44],[20,40],[12,51],[25,57],[38,45],[42,26],[36,10],[40,18],[55,21],[70,28],[70,30]],
+    [[-16,136],[-27,153],[-38,146],[-38,140],[-32,115],[-16,125],[-13,130],[-16,136]]
+  ];
+  const RINGS=[{r:R+16,arc:.55,spd:-2.3,w:1.8,a:.18,off:0},{r:R+26,arc:.35,spd:-1.7,w:1.2,a:.12,off:1.7},{r:R+38,arc:.22,spd:-1.2,w:.9,a:.08,off:3.1},{r:R+52,arc:.14,spd:-.9,w:.7,a:.05,off:4.6}];
+  const DUST=Array.from({length:30},()=>({a:Math.random()*Math.PI*2,r:R+18+Math.random()*34,s:.9+Math.random()*1.6,wt:.4+Math.random()*.8,seed:Math.random()*1000}));
+  function drawWhirl(t){
+    w.fillStyle='rgba(5,5,8,.28)';w.fillRect(0,0,SZ,SZ);
+    for(const rg of RINGS){const a0=t*rg.spd+rg.off,a1=a0+rg.arc*Math.PI*2;w.beginPath();w.arc(CX,CY,rg.r,a0,a1);w.strokeStyle=`rgba(255,255,255,${rg.a})`;w.lineWidth=rg.w;w.lineCap='round';w.stroke();w.beginPath();w.arc(CX,CY,rg.r,a0+Math.PI,a1+Math.PI);w.strokeStyle=`rgba(255,255,255,${rg.a*.35})`;w.lineWidth=rg.w*.6;w.stroke();}
+    for(const p of DUST){p.a+=.018*p.s;const rr=p.r+Math.sin(t*1.3+p.seed)*1.8,x=CX+Math.cos(p.a)*rr,y=CY+Math.sin(p.a)*rr,tx=-Math.sin(p.a),ty=Math.cos(p.a),len=3+p.s*2;w.beginPath();w.moveTo(x-tx*len,y-ty*len);w.lineTo(x+tx*len,y+ty*len);w.strokeStyle=`rgba(255,255,255,${.12+.1*Math.sin(t*2+p.seed)})`;w.lineWidth=p.wt;w.lineCap='round';w.stroke();}
+  }
+  function drawGlobe(rot){
+    g.clearRect(0,0,SZ,SZ);
+    g.beginPath();g.arc(CX,CY,R,0,Math.PI*2);g.fillStyle='rgba(255,255,255,.018)';g.fill();
+    g.beginPath();
+    for(let lat=-80;lat<=80;lat+=20){const pts=[];for(let lon=-180;lon<=180;lon+=2)pts.push(xy(lat,lon,rot));dline(pts);}
+    g.strokeStyle='rgba(255,255,255,.09)';g.lineWidth=.8;g.stroke();
+    g.beginPath();
+    for(let lon=0;lon<180;lon+=20){const pts=[],pts2=[];for(let lat=-90;lat<=90;lat+=2){pts.push(xy(lat,lon,rot));pts2.push(xy(lat,lon+180,rot));}dline(pts);dline(pts2);}
+    g.strokeStyle='rgba(255,255,255,.09)';g.lineWidth=.8;g.stroke();
+    g.beginPath();
+    for(const sh of CONTS){let s=false;for(const[lat,lon]of sh){const p=xy(lat,lon,rot);if(!p.v){s=false;continue;}if(!s){g.moveTo(p.x,p.y);s=true;}else g.lineTo(p.x,p.y);}}
+    g.strokeStyle='rgba(255,255,255,.28)';g.lineWidth=1.2;g.stroke();
+    g.beginPath();g.arc(CX,CY,R,0,Math.PI*2);g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1.4;g.stroke();
+  }
+  const s0=performance.now();
+  (function frame(now){const t=(now-s0)/1e3;drawWhirl(t);drawGlobe((t*45)%360);requestAnimationFrame(frame);})(performance.now());
+}
+
+/* ══════════════════════════════════════
+   CONCEPTS DATA
+══════════════════════════════════════ */
+const CONCEPTS=[
+  {term:'Yield Curve',brief:'Compares short and long-term interest rates',simple:'When borrowing for longer costs more than for a short time, that is normal. When it flips, that is a warning sign.',full:'The yield curve shows interest rates for bonds across different time periods. In a healthy economy, longer-term rates are higher than short-term because lenders want more compensation for waiting. When this inverts, it usually means investors expect economic trouble ahead.',ex:'In 2022, the yield curve inverted sharply. Historically, this has preceded every U.S. recession in the last 50 years, though timing varies from 6 to 24 months.',cat:'macro'},
+  {term:'Inflation',brief:'Prices rising over time means your money buys less',simple:'If a coffee costs $3 today and $3.30 next year, that 10% difference is inflation. Your money is worth less.',full:'Inflation is the rate at which prices for goods and services increase over time. Central banks like the Federal Reserve target around 2% annual inflation. When inflation rises above target, central banks typically raise interest rates to slow it down.',ex:'From 2021 to 2023, U.S. inflation peaked at 9.1% in June 2022, the highest in 40 years. The Fed responded with the fastest rate-hiking cycle since the 1980s.',cat:'basics'},
+  {term:'Interest Rate',brief:'The cost of borrowing money, set by central banks',simple:'When you borrow money, you pay back more than you took. The interest rate is how much more. Central banks control this to slow or speed up the economy.',full:'Interest rates represent the cost of borrowing money. The Federal Reserve sets a benchmark rate that influences all other rates — mortgages, car loans, credit cards. Higher rates make borrowing more expensive, which slows spending.',ex:'In 2022 to 2023, the Fed raised rates from near 0% to 5.5%, the fastest increase in decades. This made mortgages significantly more expensive and put pressure on stocks and crypto.',cat:'basics'},
+  {term:'Market Cap',brief:'The total value of all shares of a company or coin',simple:'Multiply the price by the total number of shares. That is the market cap. It tells you how big a company or asset actually is.',full:'Market capitalization is calculated by multiplying the current price of an asset by its total supply or shares outstanding. Large-cap assets are generally more stable; small-cap assets have higher potential returns but higher risk.',ex:'Bitcoin\'s market cap surpassed $2 trillion in early 2025. A single coin price means nothing without context — a $50,000 coin with 1 million supply has a smaller market cap than a $1 coin with 5 trillion supply.',cat:'basics'},
+  {term:'ETF',brief:'A fund that trades on a stock exchange like a single stock',simple:'Instead of buying individual stocks or coins, you buy a basket. An ETF bundles multiple assets together. You get exposure to all of them by owning one share.',full:'An ETF holds a collection of assets — stocks, bonds, commodities, or crypto — and trades on an exchange like a regular stock. Spot Bitcoin ETFs, approved in the U.S. in January 2024, allowed institutional money to flow into Bitcoin through regulated financial products.',ex:'The BlackRock iShares Bitcoin Trust (IBIT), launched in January 2024, accumulated over $50 billion in assets within its first year.',cat:'basics'},
+  {term:'Open Interest',brief:'Total number of active futures or options contracts',simple:'In crypto derivatives, open interest tells you how much real money is betting on price movements right now. High open interest means the market is heavily positioned.',full:'Open interest measures the total number of outstanding derivative contracts that have not been settled. Rising open interest with rising price often confirms a strong trend. Very high open interest can signal potential for sharp reversals.',ex:'When Bitcoin\'s open interest reaches extreme levels, it often precedes volatile swings in either direction. In early 2024, $3+ billion in leveraged positions were liquidated within 24 hours.',cat:'crypto'},
+  {term:'Funding Rate',brief:'The cost of holding leveraged positions in crypto futures',simple:'If everyone is betting on price going up, traders who are long pay a small fee to traders who are short. When funding is very negative, most people are betting on price going down.',full:'Funding rates are periodic payments between buyers (longs) and sellers (shorts) in perpetual futures markets. When more traders are bullish, longs pay shorts. Funding rates are a real-time sentiment indicator.',ex:'In November 2022, funding rates turned deeply negative for weeks, signaling extreme bearish sentiment. This period coincided with the FTX collapse bottom.',cat:'crypto'},
+  {term:'Liquidity',brief:'How easily an asset can be bought or sold without moving its price',simple:'A liquid market means you can buy or sell quickly without the price changing much. An illiquid market means your order alone can move the price significantly.',full:'Liquidity describes how quickly and easily an asset can be converted to cash without affecting its price. High liquidity means many buyers and sellers exist. Low liquidity means transactions have a large price impact.',ex:'Bitcoin is more liquid than most altcoins — a $1 million trade moves its price marginally. The same trade in a small-cap altcoin could move the price 10 to 20%.',cat:'basics'},
+  {term:'DXY',brief:'Measures the U.S. dollar strength against major currencies',simple:'The DXY goes up when the dollar gets stronger. A strong dollar usually puts pressure on global assets — including crypto.',full:'The U.S. Dollar Index (DXY) measures the dollar\'s value against a basket of six major currencies. When the DXY rises, capital tends to flow into dollar-denominated safe assets. When it falls, risk assets including crypto and commodities often benefit.',ex:'In September 2022, the DXY hit a 20-year high above 114. Bitcoin was trading near its cycle low. When DXY peaked and reversed, crypto began its recovery.',cat:'macro'},
+  {term:'Drawdown',brief:'The percentage drop from an asset\'s peak price',simple:'If an asset hit $100 and is now at $60, that is a 40% drawdown from the peak. Drawdowns show how much pain investors who bought at the top are experiencing.',full:'A drawdown measures the decline from a historical peak to a trough. Maximum drawdown refers to the largest recorded decline in history. Understanding historical drawdowns helps set realistic expectations.',ex:'Bitcoin has experienced drawdowns exceeding 80% in previous cycles: 84% in 2018, 77% in 2022. The S&P 500 drawdown during the 2008 financial crisis reached approximately 57%.',cat:'analysis'},
+  {term:'Support & Resistance',brief:'Price levels where buying or selling pressure concentrates',simple:'Support is a price floor where buyers tend to step in. Resistance is a price ceiling where sellers tend to take profits. These levels repeat because market memory is real.',full:'Support levels are price zones where demand has historically been strong enough to prevent further decline. Resistance levels are where supply has historically been strong enough to stop rallies. A broken resistance often becomes new support.',ex:'Bitcoin\'s $69,000 level in 2021 acted as major resistance. Once surpassed in late 2023, that same level became a support area that held multiple times during the 2024 cycle.',cat:'analysis'},
+  {term:'Quantitative Easing',brief:'When a central bank creates money to buy assets',simple:'When the economy needs help, the central bank creates new money and uses it to buy bonds. This pumps money into the financial system and usually lifts asset prices.',full:'QE is a monetary policy tool where central banks purchase financial assets to inject money into the financial system. This lowers long-term interest rates and encourages lending. Critics argue it inflates asset prices disproportionately.',ex:'Between 2020 and 2022, the Federal Reserve\'s balance sheet expanded from $4 trillion to nearly $9 trillion. This period coincided with record highs across stocks, real estate, and crypto.',cat:'macro'},
+  {term:'On-Chain Data',brief:'Information recorded directly on a blockchain',simple:'Every Bitcoin transaction is recorded publicly. Analysts read this data to understand what large holders, miners, and exchanges are actually doing — not what they\'re saying.',full:'On-chain data refers to all information recorded on a public blockchain: transactions, wallet balances, exchange flows, miner behavior, and more. Unlike traditional markets, blockchain data provides transparency.',ex:'When large amounts of Bitcoin move from wallets to exchanges, it often signals potential selling pressure. Bitcoin moving off exchanges into cold storage has historically preceded price appreciation.',cat:'crypto'},
+  {term:'Halving',brief:'Bitcoin\'s supply issuance cuts in half every 4 years',simple:'Every four years, the reward miners receive for processing Bitcoin transactions gets cut in half. Less new Bitcoin enters the market, historically driving prices higher.',full:'Bitcoin\'s protocol automatically reduces the block reward by 50% approximately every four years. This built-in supply shock is designed to control inflation and make Bitcoin increasingly scarce. The total supply is capped at 21 million coins.',ex:'The April 2024 halving reduced the block reward from 6.25 to 3.125 BTC. Historically, Bitcoin has reached new all-time highs 12 to 18 months after each halving event.',cat:'crypto'},
+  {term:'Volatility',brief:'How much an asset\'s price moves up or down',simple:'A highly volatile asset can jump 10% one day and drop 15% the next. Low-volatility assets move slowly. Volatility is not the same as risk — it is the measurement of how wild the ride is.',full:'Volatility measures the magnitude of price changes over a given period. High volatility means large, rapid price swings in both directions. Bitcoin\'s historical volatility is significantly higher than stocks or gold.',ex:'Bitcoin\'s 30-day realized volatility has historically ranged from 30% to over 100%. The S&P 500\'s average annual volatility is around 15 to 20%, making crypto significantly more volatile.',cat:'analysis'},
+  {term:'Bear Market',brief:'A sustained decline of 20% or more from recent highs',simple:'When the market drops significantly and stays down for months, it is called a bear market. They end, but the timing is never obvious.',full:'A bear market is generally defined as a 20% or greater decline from recent peak prices, sustained over time. In crypto, bear markets have historically been 70 to 85% drawdowns. They eventually end when selling pressure is exhausted.',ex:'The 2022 crypto bear market saw Bitcoin fall from $69,000 to approximately $15,500 — a 77% drawdown over roughly 12 months. The S&P 500 entered a bear market the same year, declining about 25%.',cat:'basics'},
+  {term:'Bull Market',brief:'A sustained rise in asset prices, usually 20% or more',simple:'When prices keep going up for an extended period with broad participation, it is a bull market. Sentiment turns positive and more people want to buy than sell.',full:'A bull market is a period of rising prices, typically defined as a 20% or more gain from recent lows. Bull markets are driven by economic growth, low interest rates, or strong investor sentiment. They can last months or years.',ex:'The 2020 to 2021 crypto bull market took Bitcoin from $4,000 to $69,000 — a 1,625% gain in approximately 18 months. The 2023 to 2024 bull cycle was driven largely by ETF approvals and the halving.',cat:'basics'},
+  {term:'Correlation',brief:'How closely two assets move together',simple:'If Bitcoin and tech stocks both go up and down at the same time, they are highly correlated. Knowing correlation helps you understand if you are truly diversified.',full:'Correlation measures the statistical relationship between two assets, expressed from -1 (move oppositely) to +1 (move identically). In 2022, Bitcoin\'s correlation with the Nasdaq rose sharply, meaning it behaved more like a tech stock than a safe haven.',ex:'During the 2022 rate hike cycle, Bitcoin\'s 90-day correlation with the Nasdaq 100 reached 0.7, historically one of the highest readings. This disappointed investors who expected crypto to be uncorrelated.',cat:'analysis'},
+  {term:'Realized Cap',brief:'Bitcoin\'s market cap based on what people actually paid',simple:'Instead of using today\'s price for all Bitcoin, this adds up what each coin was worth when it last moved. It shows the actual cost basis of all holders.',full:'Realized capitalization values each Bitcoin at the price it last moved on-chain, rather than the current market price. It represents the total cost basis of the market. When market cap falls below realized cap, it signals that the average holder is at a loss.',ex:'During Bitcoin\'s bottom in December 2022 near $16,000, market cap fell below realized cap — a condition historically associated with major cycle bottoms.',cat:'crypto'},
+  {term:'Risk/Reward',brief:'The ratio between potential loss and potential gain',simple:'If you risk $100 to potentially make $300, your risk/reward ratio is 1:3. Professional traders often only take trades where the potential reward is at least 2 to 3 times the risk.',full:'Risk/reward ratio compares the potential loss from a trade (risk) to the potential gain (reward). A 1:2 ratio means you risk $1 to potentially gain $2. Even with a 50% win rate, a 1:2 ratio produces net positive returns over time.',ex:'If you buy Bitcoin at $90,000 with a stop at $85,000 and a target at $105,000, your risk is $5,000 and reward is $15,000 — a 1:3 ratio. This means you can be wrong twice and still break even on the third trade.',cat:'analysis'}
+];
+
+let libFilter = 'all';
+
+function catClass(c){return 'cat-'+c;}
+function catLabel(c){return {macro:'MACRO',crypto:'CRYPTO',basics:'BASICS',analysis:'ANALYSIS'}[c]||c.toUpperCase();}
+
+function renderHubConcepts(){
+  const el = document.getElementById('hub-concepts');
+  if (!el) return;
+  el.innerHTML = CONCEPTS.slice(0,4).map(c=>`
+    <div class="cpmini" onclick="openModal('${esc(c.term)}')">
+      <div class="cpltr">${c.term[0]}</div>
+      <div><div class="cpterm">${c.term}</div><div class="cpbrief">${c.brief}</div></div>
+    </div>`).join('');
+}
+
+function renderLib(){
+  const search = (document.getElementById('lib-search')||{}).value||'';
+  let list = CONCEPTS;
+  if (libFilter !== 'all') list = list.filter(c=>c.cat===libFilter);
+  if (search) { const s=search.toLowerCase(); list=list.filter(c=>c.term.toLowerCase().includes(s)||c.brief.toLowerCase().includes(s)); }
+  const el = document.getElementById('lib-grid');
+  if (!el) return;
+  if (!list.length){el.innerHTML='<div class="no-res">No concepts found.</div>';return;}
+  el.innerHTML = list.map(c=>`
+    <div class="litem" onclick="openModal('${esc(c.term)}')">
+      <div class="lltr">${c.term[0]}</div>
+      <div class="linfo"><div class="lterm">${c.term}</div><div class="lbrief">${c.brief}</div></div>
+      <span class="lcat ${catClass(c.cat)}">${catLabel(c.cat)}</span>
+    </div>`).join('');
+}
+
+function setLibFilter(f,el){
+  libFilter=f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderLib();
+}
+
+function filterLib(){renderLib();}
+
+function esc(s){return s.replace(/'/g,"\\'");}
+
+function openModal(term){
+  const c=CONCEPTS.find(x=>x.term===term);if(!c)return;
+  document.getElementById('m-term').textContent=c.term;
+  document.getElementById('m-cat').textContent=catLabel(c.cat);
+  document.getElementById('m-simple').textContent=c.simple;
+  document.getElementById('m-full').textContent=c.full;
+  document.getElementById('m-ex').textContent=c.ex;
+  document.getElementById('modal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function modalClose(e){if(e.target===document.getElementById('modal'))modalCloseDirect();}
+function modalCloseDirect(){document.getElementById('modal').classList.remove('show');document.body.style.overflow='';}
+
+function subEmail(){
+  const v=document.getElementById('hub-email').value;
+  if(!v||!v.includes('@')){document.getElementById('hub-email').focus();return;}
+  document.getElementById('hub-email').style.display='none';
+  document.querySelector('.ebtn').style.display='none';
+  document.getElementById('hub-esucc').style.display='block';
+}
+
+/* ══════════════════════════════════════
+   SIMULATOR
+══════════════════════════════════════ */
+function simEnter(){
+  document.getElementById('sim-welcome').style.display='none';
+  const app=document.getElementById('sim-app');
+  app.style.display='block';
+  app.classList.add('fi');
+  simSlider(document.getElementById('sim-rate'));
+}
+function simSlider(el){
+  const v=parseFloat(el.value);
+  document.getElementById('sim-rdisp').textContent=v.toFixed(1)+'%';
+  const pct=((v-1)/29)*100;
+  el.style.background=`linear-gradient(90deg,#6366f1 ${pct}%,#1e1e2e ${pct}%)`;
+}
+const sfmtK=n=>{if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(1)+'K';return'$'+n.toFixed(0);};
+const sfmtF=n=>'$'+Math.round(n).toLocaleString('en-US');
+function simRun(){
+  const init=parseFloat(document.getElementById('sim-init').value)||0;
+  const mo=parseFloat(document.getElementById('sim-mo').value)||0;
+  const yrs=parseInt(document.getElementById('sim-yrs').value)||0;
+  const rate=parseFloat(document.getElementById('sim-rate').value)/100;
+  if(!yrs||(!init&&!mo))return;
+  const mr=rate/12,months=yrs*12;
+  let bal=init,inv=init;
+  const yvals=[],yinvs=[];
+  for(let m=1;m<=months;m++){bal=bal*(1+mr)+mo;inv+=mo;if(m%12===0){yvals.push(bal);yinvs.push(inv);}}
+  const interest=bal-inv,mult=bal/(inv||1);
+  document.getElementById('sim-fval').textContent=sfmtF(bal);
+  document.getElementById('sim-inv').textContent=sfmtK(inv);
+  document.getElementById('sim-int').textContent=sfmtK(interest);
+  document.getElementById('sim-mul').textContent=mult.toFixed(1)+'x';
+  const cks=[Math.floor(yrs*.25),Math.floor(yrs*.5),Math.floor(yrs*.75),yrs].filter((v,i,a)=>v>0&&a.indexOf(v)===i);
+  document.getElementById('sim-miles').innerHTML=cks.map(y=>{
+    const v=yvals[y-1]||0,iv=yinvs[y-1]||0,g=((v-iv)/iv*100).toFixed(0);
+    return`<div class="milrow"><span class="milyr">Year ${y}</span><span class="milval">${sfmtF(v)}</span><span class="milgn">+${g}%</span></div>`;
+  }).join('');
+  let tip='';
+  if(mult>=10)tip=`<strong>🔥 Incredible:</strong> Your money multiplies ${mult.toFixed(1)}x. This is the exponential power of compounding.`;
+  else if(mult>=5)tip=`<strong>✅ Strong growth:</strong> Every $1 you invest today becomes $${mult.toFixed(1)} by year ${yrs}.`;
+  else tip=`<strong>💡 The secret:</strong> More than ${((interest/bal)*100).toFixed(0)}% of your final balance is pure interest — money you never worked for.`;
+  document.getElementById('sim-tip').innerHTML=tip;
+  document.getElementById('sim-results').classList.add('show');
+  setTimeout(()=>simDrawChart(yvals,yinvs,yrs),50);
+}
+function simDrawChart(vals,invs,yrs){
+  const canvas=document.getElementById('sim-chart');
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth,H=180;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const max=Math.max(...vals);
+  const pad={t:16,b:28,l:56,r:16};
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b,n=vals.length;
+  const xO=i=>pad.l+(i/(n-1))*cW,yO=v=>pad.t+cH-(v/max)*cH;
+  ctx.strokeStyle='#ffffff06';ctx.lineWidth=1;
+  [0,.25,.5,.75,1].forEach(f=>{const y=pad.t+cH*(1-f);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();});
+  ctx.fillStyle='#33415520';ctx.beginPath();ctx.moveTo(xO(0),yO(invs[0]));
+  invs.forEach((v,i)=>{if(i>0)ctx.lineTo(xO(i),yO(v));});
+  ctx.lineTo(xO(n-1),pad.t+cH);ctx.lineTo(xO(0),pad.t+cH);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#334155';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();invs.forEach((v,i)=>i===0?ctx.moveTo(xO(i),yO(v)):ctx.lineTo(xO(i),yO(v)));ctx.stroke();ctx.setLineDash([]);
+  const gr=ctx.createLinearGradient(0,pad.t,0,pad.t+cH);gr.addColorStop(0,'#4ade8035');gr.addColorStop(1,'#05050800');
+  ctx.fillStyle=gr;ctx.beginPath();ctx.moveTo(xO(0),yO(vals[0]));
+  vals.forEach((v,i)=>{if(i>0)ctx.lineTo(xO(i),yO(v));});
+  ctx.lineTo(xO(n-1),pad.t+cH);ctx.lineTo(xO(0),pad.t+cH);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#4ade80';ctx.lineWidth=2.5;ctx.lineJoin='round';
+  ctx.beginPath();vals.forEach((v,i)=>i===0?ctx.moveTo(xO(i),yO(v)):ctx.lineTo(xO(i),yO(v)));ctx.stroke();
+  ctx.fillStyle='#334155';ctx.font='10px Inter';ctx.textAlign='right';
+  [0,.5,1].forEach(f=>ctx.fillText(sfmtK(max*f),pad.l-6,pad.t+cH*(1-f)+3));
+  ctx.textAlign='center';const step=Math.ceil(yrs/5);
+  for(let y=step;y<=yrs;y+=step){const i=y-1;if(i<n)ctx.fillText('Y'+y,xO(i),H-8);}
+}
+
+/* ══════════════════════════════════════
+   CANDLESTICK PATTERNS
+══════════════════════════════════════ */
+let cpReady = false;
+const CPC = {green:'#4ade80',red:'#f87171',wick:'#64748b',bg:'#080810'};
+function cpDraw(canvas,candles,opts){
+  opts=opts||{};
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.width,H=canvas.height;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+  const pad=opts.pad||16;
+  const hi=Math.max(...candles.map(c=>c.high)),lo=Math.min(...candles.map(c=>c.low));
+  const range=hi-lo||1;
+  const toY=v=>pad+(H-pad*2)*(1-(v-lo)/range);
+  const n=candles.length,slotW=(W-pad*2)/n;
+  const bodyW=Math.max(slotW*.55,6);
+  candles.forEach((c,i)=>{
+    const cx=pad+slotW*i+slotW/2;
+    const oY=toY(c.open),cY=toY(c.close),hY=toY(c.high),lY=toY(c.low);
+    const bull=c.close>=c.open;
+    const col=c.color||(bull?CPC.green:CPC.red);
+    const top=Math.min(oY,cY),bot=Math.max(oY,cY),bh=Math.max(bot-top,2);
+    ctx.strokeStyle=col;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(cx,hY);ctx.lineTo(cx,top);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,bot);ctx.lineTo(cx,lY);ctx.stroke();
+    ctx.fillStyle=col;ctx.fillRect(cx-bodyW/2,top,bodyW,bh);
+  });
+}
+const CP_PATTERNS=[
+  {id:'doji',name:'Doji',type:'single',signal:'neutral',title:'Doji',desc:'A Doji forms when the opening and closing price are virtually the same, creating a very small or nonexistent body. The long wicks show buyers and sellers fought hard but neither won.',truth:'A Doji alone means nothing. Its power comes from context — a Doji after a long uptrend signals potential exhaustion.',reliability:55,direction:'Neutral / Indecision',conditions:['Appears after a prolonged trend for maximum significance','Volume should ideally increase on the Doji candle','Requires confirmation from the next candle','Most powerful at key support or resistance levels'],warning:'A Doji in the middle of a ranging market has little significance. Context is everything.',candles:[{open:50,close:50.2,high:60,low:40}],quiz:{candles:[{open:50,close:50.1,high:65,low:35}],q:'This pattern appears after a 3-week uptrend. What does it most likely signal?',opts:['Strong continuation upward','Market indecision — possible reversal','Confirmed downtrend beginning','No significance whatsoever'],correct:1,fb:{good:'✅ Correct. A Doji after an uptrend signals indecision and possible exhaustion.',bad:'❌ A Doji after an uptrend signals indecision. Always wait for confirmation.'}}},
+  {id:'hammer',name:'Hammer',type:'single',signal:'bullish',title:'Hammer',desc:'The Hammer has a small body near the top and a long lower wick at least 2x the body size. Sellers pushed price down hard, but buyers stepped in and pushed it back up.',truth:'The Hammer is one of the most reliable single-candle reversal patterns — but only when it appears after a downtrend, at a support level.',reliability:72,direction:'Bullish Reversal',conditions:['Must appear after a downtrend or significant pullback','Lower wick should be at least 2x the body length','Little to no upper wick','Confirmation next candle should close higher','Higher volume strengthens the signal'],warning:'A Hammer at a random point in an uptrend is not significant. Location matters.',candles:[{open:55,close:58,high:60,low:35}],quiz:{candles:[{open:54,close:57,high:59,low:34}],q:'You see this candle at the bottom of a 2-week downtrend on strong volume. What is the likely next move?',opts:['Continue downward','Bullish reversal likely','No change expected','Bearish continuation'],correct:1,fb:{good:'✅ Correct. A Hammer at the end of a downtrend with strong volume is a high-probability bullish reversal signal.',bad:'❌ A Hammer at the end of a downtrend signals buyers stepped in aggressively.'}}},
+  {id:'shooting-star',name:'Shooting Star',type:'single',signal:'bearish',title:'Shooting Star',desc:'Small body near the bottom, long upper wick. Buyers pushed price up during the session, but sellers overwhelmed them and pushed it back down near the open.',truth:'The long upper wick is evidence of failed buying pressure. When this appears at resistance after an uptrend, it is a strong warning sign.',reliability:68,direction:'Bearish Reversal',conditions:['Must appear after an uptrend','Upper wick at least 2x the body','Little to no lower wick','Confirmation: next candle should close lower','Best at key resistance levels'],warning:'Shooting Stars in a downtrend or at random levels are unreliable.',candles:[{open:55,close:52,high:75,low:50}],quiz:{candles:[{open:56,close:53,high:76,low:51}],q:'This candle forms right at a strong resistance level after a long rally. What should you expect?',opts:['Breakout above resistance','Bearish reversal or rejection','Sideways consolidation','No actionable signal'],correct:1,fb:{good:'✅ Exactly. A Shooting Star at resistance after a rally is a classic bearish rejection signal.',bad:'❌ A Shooting Star at resistance means sellers overwhelmed buyers at a key level.'}}},
+  {id:'marubozu',name:'Marubozu',type:'single',signal:'bullish',title:'Marubozu',desc:'A full-body candle with no wicks — complete dominance by one side. A green Marubozu means buyers controlled the entire session with no pushback.',truth:'The Marubozu is the strongest single-candle signal of momentum. It shows conviction, not indecision.',reliability:74,direction:'Strong Momentum',conditions:['No wick or very minimal wick on either end','High volume confirms the conviction','Bullish: open = low, close = high','Bearish: open = high, close = low','Often signals continuation of existing trend'],warning:'After a very extended move, a Marubozu can mark the final blow-off.',candles:[{open:40,close:70,high:70,low:40}],quiz:{candles:[{open:40,close:70,high:70.5,low:39.5}],q:'A green Marubozu appears on a breakout above a 3-month resistance level on 3x average volume. This signals:',opts:['Imminent reversal','Strong bullish momentum and conviction','Indecision at resistance','Bearish trap'],correct:1,fb:{good:'✅ Correct. A Marubozu on a breakout with high volume is one of the strongest momentum signals.',bad:'❌ A Marubozu on high volume at a breakout means buyers are in full control.'}}},
+  {id:'engulfing-bull',name:'Bullish Engulfing',type:'two',signal:'bullish',title:'Bullish Engulfing',desc:'A two-candle pattern: a smaller red candle followed by a larger green candle whose body completely engulfs the red body. The second day\'s buyers overpowered the previous sellers entirely.',truth:'The engulfing shows a direct power shift in a single session. The bigger the second candle relative to the first, the stronger the signal.',reliability:76,direction:'Bullish Reversal',conditions:['Must appear after a downtrend','Second candle body must completely cover first candle body','Higher volume on the second candle is ideal','Works best at key support zones','More reliable on daily or weekly timeframes'],warning:'A Bullish Engulfing in a strong downtrend without nearby support is less reliable.',candles:[{open:60,close:50,high:63,low:48},{open:48,close:63,high:65,low:46}],quiz:{candles:[{open:60,close:50,high:62,low:48},{open:49,close:64,high:66,low:47}],q:'This two-candle pattern appears at a major support level. The green candle has 2x the volume of the red. What does this signal?',opts:['Bearish continuation','Bullish reversal with strong conviction','Market indecision','Neutral — no signal'],correct:1,fb:{good:'✅ Correct. Bullish Engulfing at support with 2x volume is one of the highest-probability reversal setups.',bad:'❌ A Bullish Engulfing at support with high volume signals strong buyer conviction.'}}},
+  {id:'engulfing-bear',name:'Bearish Engulfing',type:'two',signal:'bearish',title:'Bearish Engulfing',desc:'A smaller green candle followed by a larger red candle that completely engulfs the green body. Sellers took over completely after a period of buying.',truth:'When this appears at resistance after an uptrend, it is one of the clearest signals that a top may be forming.',reliability:74,direction:'Bearish Reversal',conditions:['Must appear after an uptrend','Red candle body must fully engulf the green candle body','Higher volume on the red candle strengthens the signal','Most powerful at known resistance levels','Confirm with next candle closing lower'],warning:'In a strong bull market, even Bearish Engulfing patterns can fail.',candles:[{open:50,close:60,high:62,low:48},{open:62,close:47,high:64,low:45}],quiz:{candles:[{open:50,close:61,high:63,low:49},{open:63,close:48,high:65,low:46}],q:'After a 3-week rally, this pattern appears at a prior resistance level. What is the likely outcome?',opts:['Continued rally higher','Bearish reversal — top forming','Random noise, ignore','Neutral consolidation'],correct:1,fb:{good:'✅ Correct. Bearish Engulfing at resistance after a rally is a classic top-forming signal.',bad:'❌ A Bearish Engulfing at resistance signals a power shift to sellers.'}}},
+  {id:'morning-star',name:'Morning Star',type:'three',signal:'bullish',title:'Morning Star',desc:'A three-candle bullish reversal: a large red candle, then a small-bodied star, then a large green candle that closes into the first candle\'s body. A clear shift from seller to buyer control.',truth:'The Morning Star is one of the most reliable three-candle reversal patterns. The middle candle is the pivot point.',reliability:80,direction:'Bullish Reversal',conditions:['Appears after a downtrend','Middle candle has a small body (can be a Doji)','Third candle closes at least 50% into the first candle\'s body','Volume typically increases on the third candle','Best at major support levels'],warning:'The pattern loses significance if the third candle only closes slightly into the first.',candles:[{open:70,close:55,high:72,low:53},{open:54,close:53,high:57,low:50},{open:53,close:68,high:70,low:51}],quiz:{candles:[{open:70,close:55,high:71,low:53},{open:54,close:52,high:56,low:49},{open:52,close:67,high:69,low:50}],q:'You spot this 3-candle pattern after a long downtrend at a historical support zone. What is the correct read?',opts:['Bearish continuation pattern','Neutral — wait for more data','Strong bullish reversal signal','Bearish trap for buyers'],correct:2,fb:{good:'✅ Correct. The Morning Star at support after a downtrend is one of the highest-reliability reversal patterns.',bad:'❌ The Morning Star after a downtrend at support is a strong bullish reversal.'}}},
+  {id:'evening-star',name:'Evening Star',type:'three',signal:'bearish',title:'Evening Star',desc:'The bearish mirror of the Morning Star. A large green candle, a small-bodied star, then a large red candle that closes deep into the first candle\'s body.',truth:'The Evening Star marks the transition from buyer dominance to seller dominance. The gap on the star candle is crucial.',reliability:78,direction:'Bearish Reversal',conditions:['Appears after an uptrend','Middle candle has a small body or is a Doji','Third candle closes at least 50% into the first green candle','Best at major resistance levels'],warning:'If the third candle closes less than 50% into the first, the pattern is weak.',candles:[{open:50,close:65,high:67,low:48},{open:66,close:67,high:70,low:64},{open:67,close:52,high:69,low:50}],quiz:{candles:[{open:50,close:66,high:68,low:49},{open:67,close:68,high:71,low:65},{open:68,close:53,high:70,low:51}],q:'This pattern forms right at an all-time high resistance. What is the most likely interpretation?',opts:['Bullish breakout imminent','Top formation — bearish reversal likely','Continuation of uptrend','No significance at all-time highs'],correct:1,fb:{good:'✅ Exactly. An Evening Star at an all-time high is a powerful warning that buyers are exhausted.',bad:'❌ The Evening Star at resistance signals buyer exhaustion.'}}},
+  {id:'three-soldiers',name:'3 White Soldiers',type:'three',signal:'bullish',title:'Three White Soldiers',desc:'Three consecutive large green candles, each opening within the prior candle\'s body and closing near its high. Sustained, consistent buying pressure with no seller pushback.',truth:'Three White Soldiers is a powerful continuation signal. It often appears mid-trend and signals the trend is healthy and accelerating.',reliability:77,direction:'Strong Bullish Continuation',conditions:['Each candle opens within the body of the previous','Each candle closes near its high','Small or no upper wicks','Ideally appears after a consolidation or pullback','High and increasing volume across all three'],warning:'After an already extended move, Three White Soldiers can signal exhaustion rather than continuation.',candles:[{open:42,close:52,high:53,low:40},{open:50,close:61,high:62,low:49},{open:59,close:70,high:71,low:58}],quiz:{candles:[{open:42,close:52,high:53,low:41},{open:50,close:62,high:63,low:49},{open:60,close:71,high:72,low:59}],q:'Three White Soldiers appears after a 2-week consolidation in an overall uptrend with increasing volume. This signals:',opts:['Imminent reversal downward','Buyers exhausted — sell signal','Strong bullish continuation — trend resuming','No clear signal'],correct:2,fb:{good:'✅ Correct. Three White Soldiers after consolidation with rising volume is one of the cleanest trend continuation signals.',bad:'❌ Three White Soldiers after consolidation with rising volume signals buyers are back in control.'}}}
+];
+function cpDrawIntro(){
+  const c=document.getElementById('cp-intro');
+  if(c)cpDraw(c,[{open:35,close:55,high:65,low:25}],{pad:8});
+}
+function cpGallery(filter){
+  document.getElementById('cp-welcome').style.display='none';
+  document.getElementById('cp-detail').style.display='none';
+  const g=document.getElementById('cp-gallery');
+  g.style.display='block';g.classList.add('fi');
+  const filtered=filter==='all'?CP_PATTERNS:CP_PATTERNS.filter(p=>p.signal===filter||p.type===filter);
+  g.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:22px;font-weight:900;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Pattern Library</div>
+      <div style="font-size:12px;color:var(--txf);">${filtered.length} patterns</div>
+    </div>
+    <div class="cptabs">
+      ${['all','bullish','bearish','neutral','single','two','three'].map(f=>`<div class="cptab ${filter===f?'active':''}" onclick="cpGallery('${f}')">${{all:'All',bullish:'🟢 Bullish',bearish:'🔴 Bearish',neutral:'⚪ Neutral',single:'1 Candle',two:'2 Candles',three:'3 Candles'}[f]}</div>`).join('')}
+    </div>
+    <div class="pgrid" id="cp-pgrid"></div>`;
+  const grid=document.getElementById('cp-pgrid');
+  filtered.forEach(p=>{
+    const div=document.createElement('div');div.className='pcrd';div.onclick=()=>cpDetail(p.id);
+    const sc=p.signal==='bullish'?'bull':p.signal==='bearish'?'bear':'neut';
+    const sl=p.signal==='bullish'?'BULLISH':p.signal==='bearish'?'BEARISH':'NEUTRAL';
+    div.innerHTML=`<canvas id="cpt-${p.id}" width="70" height="70"></canvas><div class="pname">${p.name}</div><div class="psig ${sc}">${sl}</div>`;
+    grid.appendChild(div);
+    setTimeout(()=>{const c=document.getElementById('cpt-'+p.id);if(c)cpDraw(c,p.candles,{pad:6});},30);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function cpDetail(id){
+  const p=CP_PATTERNS.find(x=>x.id===id);
+  document.getElementById('cp-gallery').style.display='none';
+  const d=document.getElementById('cp-detail');d.style.display='block';d.classList.add('fi');
+  const sc=p.signal==='bullish'?'bull':p.signal==='bearish'?'bear':'neut';
+  const rc=p.reliability>=75?'#4ade80':p.reliability>=60?'#facc15':'#f87171';
+  const tyLbl=p.type==='single'?'SINGLE CANDLE':p.type==='two'?'TWO CANDLE PATTERN':'THREE CANDLE PATTERN';
+  d.innerHTML=`
+    <button class="backbtn" onclick="cpGallery('all')">← Back to Library</button>
+    <div class="dcrd">
+      <div class="dhead"><div class="dtitle">${p.title}</div><div class="psig ${sc}" style="font-size:10px;padding:4px 12px;">${p.signal.toUpperCase()}</div></div>
+      <div class="dtype">${tyLbl}</div>
+      <div class="cwrap"><canvas id="cp-dcanv" width="200" height="140"></canvas></div>
+      <p style="font-size:13px;color:#64748b;line-height:1.8;margin-bottom:16px;">${p.desc}</p>
+      <div class="irow">
+        <div class="ibox"><div class="ilbl">DIRECTION</div><div class="ival" style="color:${p.signal==='bullish'?'#4ade80':p.signal==='bearish'?'#f87171':'#818cf8'};font-size:12px;">${p.direction}</div></div>
+        <div class="ibox"><div class="ilbl">RELIABILITY</div><div class="ival" style="color:${rc};">${p.reliability}%</div><div class="rbg"><div class="rfil" style="width:${p.reliability}%;background:${rc};"></div></div></div>
+      </div>
+      <div class="truth-box"><div class="truth-lbl">✦ KEY INSIGHT</div><div class="truth-txt">${p.truth}</div></div>
+      <div class="conds"><div class="condlbl">✓ CONDITIONS FOR VALIDITY</div>${p.conditions.map(c=>`<div class="condrow"><div class="conddot"></div><div class="condtxt">${c}</div></div>`).join('')}</div>
+      <div class="warn-box">⚠️ <strong style="color:#b8950e;">Watch out:</strong> ${p.warning}</div>
+    </div>
+    <div class="qsec">
+      <div class="qlbl">🧠 PATTERN RECOGNITION QUIZ</div>
+      <div class="qcwrap"><canvas id="cp-qcanv" width="200" height="140"></canvas></div>
+      <div class="quiz-q">${p.quiz.q}</div>
+      <div class="qopts" id="cp-qopts">
+        ${p.quiz.opts.map((o,i)=>`<button class="qopt" onclick="cpAnswer(${i},${p.quiz.correct},'${p.id}')">${o}</button>`).join('')}
+      </div>
+      <div class="qfb" id="cp-qfb"></div>
+    </div>`;
+  setTimeout(()=>{
+    const dc=document.getElementById('cp-dcanv'),qc=document.getElementById('cp-qcanv');
+    if(dc)cpDraw(dc,p.candles,{pad:14});if(qc)cpDraw(qc,p.quiz.candles,{pad:14});
+  },40);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function cpAnswer(idx,correct,pid){
+  const p=CP_PATTERNS.find(x=>x.id===pid);
+  const opts=document.querySelectorAll('#cp-qopts .qopt');
+  const ok=idx===correct;
+  opts.forEach((o,i)=>{o.disabled=true;if(i===correct)o.classList.add('correct');else if(i===idx&&!ok)o.classList.add('wrong');else o.classList.add('reveal');});
+  const fb=document.getElementById('cp-qfb');
+  fb.textContent=ok?p.quiz.fb.good:p.quiz.fb.bad;
+  fb.className='qfb show '+(ok?'good':'bad');
+}
+
+/* ══════════════════════════════════════
+   PRICE ACTION PLAYBOOK
+══════════════════════════════════════ */
+(function(){
+  var cur=0,score=0,answered=[],DPR=window.devicePixelRatio||1;
+  function gel(id){return document.getElementById(id);}
+  function setupCV(id,w,h){var c=gel(id);if(!c)return null;c.style.width=w+'px';c.style.height=h+'px';c.width=w*DPR;c.height=h*DPR;var ctx=c.getContext('2d');ctx.scale(DPR,DPR);ctx.clearRect(0,0,w,h);return{ctx:ctx,w:w,h:h};}
+  function drawCand(ctx,x,o,cl,hi,lo,bw,sc,base){var bull=cl>=o,col=bull?'#4ade80':'#f87171';var oY=base-o*sc,cY=base-cl*sc,hY=base-hi*sc,lY=base-lo*sc;var top=Math.min(oY,cY),bot=Math.max(oY,cY),bh=Math.max(bot-top,2);ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,hY);ctx.lineTo(x,top);ctx.stroke();ctx.beginPath();ctx.moveTo(x,bot);ctx.lineTo(x,lY);ctx.stroke();ctx.fillStyle=col;ctx.fillRect(x-bw/2,top,bw,bh);}
+  function hLine(ctx,y,color,w,dash){ctx.strokeStyle=color;ctx.lineWidth=w||1.5;ctx.setLineDash(dash||[]);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(9999,y);ctx.stroke();ctx.setLineDash([]);}
+  function txt(ctx,x,y,s,color,size,align){ctx.fillStyle=color||'#475569';ctx.font='bold '+(size||9)+'px Inter';ctx.textAlign=align||'left';ctx.fillText(s,x,y);}
+  function arw(ctx,x1,y1,x2,y2,color){color=color||'#6366f1';ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();var a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-8*Math.cos(a-.4),y2-8*Math.sin(a-.4));ctx.lineTo(x2-8*Math.cos(a+.4),y2-8*Math.sin(a+.4));ctx.closePath();ctx.fill();}
+  function drawSR(){var s=setupCV('cv0',300,150);if(!s)return;var ctx=s.ctx,h=s.h,sc=2.6,base=h-10;var cs=[[20,22,18,16],[22,26,21,19],[26,24,27,22],[24,28,23,21],[28,25,30,24],[25,27,24,23],[27,32,26,24],[32,30,34,28],[30,31,29,28],[31,29,33,28]];cs.forEach(function(c,i){drawCand(ctx,18+i*27,c[0],c[1],c[2],c[3],9,sc,base);});hLine(ctx,base-32*sc,'#4ade8070',1.5,[4,3]);hLine(ctx,base-18*sc,'#f8717170',1.5,[4,3]);txt(ctx,4,base-32*sc-4,'RESISTANCE','#4ade80',9);txt(ctx,4,base-18*sc+12,'SUPPORT','#f87171',9);}
+  function drawStructure(){var s=setupCV('cv0',300,155);if(!s)return;var ctx=s.ctx,h=s.h;var pts=[{x:15,y:130},{x:50,y:88},{x:75,y:108},{x:115,y:58},{x:145,y:78},{x:185,y:28},{x:215,y:52},{x:255,y:18}];ctx.strokeStyle='#334155';ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();pts.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.stroke();ctx.setLineDash([]);[{x:50,y:88},{x:115,y:58},{x:185,y:28}].forEach(function(p){ctx.fillStyle='#4ade80';ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();txt(ctx,p.x,p.y-8,'HH','#4ade80',8,'center');});[{x:75,y:108},{x:145,y:78},{x:215,y:52}].forEach(function(p){ctx.fillStyle='#38bdf8';ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();txt(ctx,p.x,p.y+14,'HL','#38bdf8',8,'center');});txt(ctx,10,h-4,'HH + HL = UPTREND','#475569',9);}
+  function drawTrend(){var s=setupCV('cv0',300,155);if(!s)return;var ctx=s.ctx,h=s.h;var up=[{x:10,y:140},{x:35,y:115},{x:50,y:125},{x:80,y:90},{x:95,y:104},{x:128,y:65}];var dn=[{x:155,y:48},{x:180,y:72},{x:195,y:58},{x:225,y:92},{x:240,y:76},{x:272,y:112}];ctx.lineWidth=2;ctx.strokeStyle='#4ade8040';ctx.beginPath();up.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.stroke();ctx.strokeStyle='#f8717140';ctx.beginPath();dn.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.stroke();ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.strokeStyle='#4ade80';ctx.beginPath();ctx.moveTo(10,143);ctx.lineTo(128,63);ctx.stroke();ctx.strokeStyle='#f87171';ctx.beginPath();ctx.moveTo(155,45);ctx.lineTo(272,115);ctx.stroke();ctx.setLineDash([]);txt(ctx,55,h-4,'UPTREND','#4ade80',9,'center');txt(ctx,215,h-4,'DOWNTREND','#f87171',9,'center');}
+  function drawBreakRetest(){var s=setupCV('cv0',300,155);if(!s)return;var ctx=s.ctx,h=s.h,sc=2.8,base=h-8;var cs=[[20,22,19,18],[22,24,21,20],[24,26,23,21],[26,25,27,24],[25,27,24,23],[27,26,28,25],[26,28,27,25],[28,34,27,26],[34,32,35,30],[32,33,31,30],[33,37,32,31],[37,40,36,35]];var resY=base-28*sc;hLine(ctx,resY,'#6366f150',1.5,[3,3]);txt(ctx,4,resY-4,'Resistance','#6366f1',8);cs.forEach(function(c,i){drawCand(ctx,14+i*22,c[0],c[1],c[2],c[3],8,sc,base);});arw(ctx,188,resY-16,188,resY-34,'#4ade80');txt(ctx,193,resY-36,'BREAK','#4ade80',8);arw(ctx,232,resY+18,232,resY+4,'#facc15');txt(ctx,238,resY+28,'RETEST','#facc15',8);arw(ctx,272,resY-8,272,resY-26,'#38bdf8');}
+  function drawEntry(){var s=setupCV('cv0',300,170);if(!s)return;var ctx=s.ctx,h=s.h,sc=3.0,base=h-8;var cs=[[22,24,21,20],[24,26,23,21],[26,28,25,23],[28,27,29,26],[27,25,28,24],[25,26,24,23],[26,28,25,24],[28,32,27,26],[32,35,31,29]];var supY=base-26*sc;hLine(ctx,supY,'#4ade8040',1.5,[3,3]);txt(ctx,4,supY-4,'Support / Retest Zone','#4ade80',8);cs.forEach(function(c,i){drawCand(ctx,14+i*30,c[0],c[1],c[2],c[3],9,sc,base);});ctx.fillStyle='#4ade8012';ctx.strokeStyle='#4ade8030';ctx.lineWidth=1;ctx.fillRect(178,supY-8,38,24);ctx.strokeRect(178,supY-8,38,24);txt(ctx,197,supY+12,'ENTRY','#4ade80',8,'center');arw(ctx,260,supY-6,260,supY-28,'#38bdf8');txt(ctx,232,supY-30,'TARGET','#38bdf8',8);hLine(ctx,supY+20,'#f8717140',1,[2,3]);txt(ctx,4,supY+32,'STOP','#f87171',8);}
+  function drawStop(){var s=setupCV('cv0',300,170);if(!s)return;var ctx=s.ctx,h=s.h,sc=3.0,base=h-8;var cs=[[24,26,23,21],[26,28,25,23],[28,27,30,26],[27,29,26,25],[29,28,31,27],[28,30,27,26],[30,35,29,27]];var supY=base-26*sc;hLine(ctx,supY,'#4ade8050',1.5,[3,3]);txt(ctx,4,supY-5,'Support Level','#4ade80',8);cs.forEach(function(c,i){drawCand(ctx,18+i*36,c[0],c[1],c[2],c[3],11,sc,base);});ctx.fillStyle='#f8717112';ctx.strokeStyle='#f8717125';ctx.lineWidth=1;ctx.fillRect(0,supY+2,300,22);ctx.strokeRect(0,supY+2,300,22);txt(ctx,150,supY+15,'STOP LOSS ZONE','#f87171',9,'center');hLine(ctx,supY-8,'#6366f140',1,[2,3]);txt(ctx,4,supY-11,'Entry','#6366f1',8);hLine(ctx,supY-50,'#38bdf840',1,[2,3]);txt(ctx,4,supY-54,'Take Profit','#38bdf8',8);}
+  var drawFns=[drawSR,drawStructure,drawTrend,drawBreakRetest,drawEntry,drawStop];
+  var modules=[
+    {num:'MODULE 01',title:'Support & Resistance',body:['<strong>Support</strong> is a price level where buyers have historically stepped in — it acts like a floor. <strong>Resistance</strong> is where sellers consistently appear — it acts like a ceiling.','These levels represent areas where large amounts of money changed hands. Those same players often react again when price returns to those levels.','The more times a level has been tested without breaking, the more significant it becomes — until it finally breaks.'],truth:'Support and resistance are not exact prices. They are zones. Trading them as if they were precise numbers will lead to premature exits and missed entries.',rules:['A level tested 3+ times is highly significant','Once broken, resistance becomes support (and vice versa)','Wider price zones are more reliable than single-price lines','Volume at the level strengthens its significance'],warn:'Beginners draw too many S/R lines and create noise. Focus on the 2-3 most obvious levels on any chart.',quiz:{q:'Price has bounced off the same level 4 times over 3 months and is approaching it again. What is most likely?',opts:['Price will break through easily','The level is significant — expect a reaction','The level loses significance after many touches','No prediction can be made'],correct:1,good:'Correct. Multiple touches increase significance. Large players are aware of these levels.',bad:'A level tested multiple times becomes more significant. Expect a reaction.'}},
+    {num:'MODULE 02',title:'Market Structure',body:['Market structure is the sequence of highs and lows price creates over time. It tells you who is in control — buyers or sellers.','<strong>Uptrend:</strong> Higher Highs (HH) + Higher Lows (HL). Buyers are in control.','<strong>Downtrend:</strong> Lower Highs (LH) + Lower Lows (LL). Sellers dominate. <strong>Range:</strong> Equal highs and lows — neither side winning.'],truth:'Price structure alone tells you everything. If price is making HH and HL, you are in an uptrend — no indicator needed.',rules:['Trade with structure, not against it','An uptrend breaks when price creates a Lower Low','A downtrend breaks when price creates a Higher High','The first HL after a downtrend is often the best entry','Ranges expand — wait for the breakout direction'],warn:'One Higher High does not end a downtrend. Look for the full sequence: HH followed by a HL.',quiz:{q:'Price has been making HH and HL for 6 weeks. It just pulled back and formed a new HL above the previous one. What does this tell you?',opts:['Trend is about to reverse','Uptrend is intact — potential buy area','Downtrend is starting','The range is expanding'],correct:1,good:'Correct. A new HL in an uptrend confirms structure is healthy. Buyers are still in control.',bad:'A new HL means the uptrend structure is intact. This pullback is where structure traders look to buy.'}},
+    {num:'MODULE 03',title:'Trend Analysis',body:['A trend is a directional move sustained over time. The key skill is identifying <strong>where you are within the trend</strong>.','Trends have two phases: <strong>impulse moves</strong> (strong directional candles) and <strong>corrective moves</strong> (pullbacks that are smaller, slower, and less decisive).','Trading with the trend means waiting for the correction to end and entering in the direction of the impulse.'],truth:'Entering mid-trend is often safer than trying to catch a reversal. Catching tops and bottoms is exciting but statistically disadvantageous.',rules:['Impulse moves: large bodies, momentum, high volume','Corrective moves: small bodies, overlapping candles, low volume','Enter on corrections — not during impulses','Correction should not retrace more than 50-61% of the impulse','If correction retraces 100%, the trend may be over'],warn:'The later you enter a trend, the higher the risk of being caught in the reversal.',quiz:{q:'In an uptrend, price makes a strong impulse up then pulls back 40% on low volume with small overlapping red candles. This is:',opts:['A trend reversal','A healthy correction — potential entry zone','A breakout signal','An indecision phase — avoid'],correct:1,good:'Correct. Low-volume small candles retracing 40% of an impulse is a textbook healthy pullback.',bad:'Low-volume, small-bodied candles retracing 40% = healthy correction.'}},
+    {num:'MODULE 04',title:'Break & Retest',body:['One of the highest-probability setups in price action. When price breaks a key level, it often <strong>returns to retest that level</strong> before continuing in the breakout direction.','When resistance breaks and becomes support, new buyers who missed the breakout wait at that level to buy the pullback. Their demand creates the bounce.','<strong>The sequence:</strong> Level established → Breakout with momentum → Retest of broken level → Continuation.'],truth:'The retest is where patient traders enter. The breakout itself is exciting but risky — fakeouts are common.',rules:['Breakout candle should be strong — large body, ideally high volume','Retest should happen within a reasonable timeframe','During retest, look for rejection candles at the flipped level','Stop loss goes just below the retested level','If retest fails and price breaks back through — exit immediately'],warn:'Not every level gets retested. If you miss the retest and chase, wait for the next setup.',quiz:{q:'Price breaks above a 2-month resistance on strong volume, pulls back to that level on declining volume, and forms a Hammer. This is:',opts:['A fakeout — price will break back down','A confirmed retest with entry signal','Too risky — avoid completely','An indecision pattern only'],correct:1,good:'Correct. Breakout on volume + pullback on declining volume + Hammer = textbook break and retest entry.',bad:'Breakout on volume + weak pullback + Hammer at flipped support = classic break and retest setup.'}},
+    {num:'MODULE 05',title:'Entry Refinement',body:['Knowing the right area to trade is only half the job. <strong>Entry refinement</strong> is waiting for confirmation before committing capital.','<strong>Aggressive entry:</strong> Enter at the zone as soon as a reaction candle appears. Tighter stop, better reward.','<strong>Conservative entry:</strong> Wait for the candle to close and the next candle to confirm. The best entries happen at the <strong>confluence</strong> of: key level + structure alignment + confirmation candle.'],truth:'The difference between a good trader and a great one is not which levels they identify — it is the patience to wait for the right candle.',rules:['Never enter before the level is reached','Wait for a reaction candle at the level','Confluence = level + structure + candle pattern','Aggressive: enter on candle body, stop below the wick','Conservative: wait for next candle to close above entry candle'],warn:'Confluence increases probability — it does not guarantee a winner. Even perfect entries fail.',quiz:{q:'Price pulls back to a key support in an uptrend. Which gives the BEST entry confirmation?',opts:['Enter as soon as price touches the level','Enter when price is 2% above the level','Wait for a bullish reaction candle at the level to close','Wait for price to make a new high first'],correct:2,good:'Correct. Waiting for the reaction candle to close confirms buyers are defending the level.',bad:'The best practice is waiting for a bullish candle to close at the level.'}},
+    {num:'MODULE 06',title:'Stop Loss Placement',body:['A stop loss is not optional. It is the mechanism that keeps you in the game when a trade goes wrong.','Price Action stop placement rule: <strong>stops go beyond the level that would invalidate your trade thesis</strong>.','If you bought at support expecting a bounce, your trade is wrong the moment price closes convincingly below that support. Your stop belongs just below that level.'],truth:'Stops placed at logical price action levels are more effective than percentage-based stops. You are wrong when the market proves you wrong.',rules:['Stop goes BELOW the level you are trading (for longs)','Leave breathing room — place slightly beyond the level','Never move stop away from entry to give more room','You CAN move stop to breakeven once trade moves in your favor','Stop size determines your position size — never the reverse'],warn:'The #1 mistake is placing stops too tight to minimize loss. Stops too close to entry get hit by normal volatility before the real move begins.',quiz:{q:'You buy at support at $100. The support zone ranges from $98 to $100. Where should your stop be?',opts:['At $99 — inside the zone','At $100 — at entry price','At $97 — just below the entire zone','At $95 — to give more room'],correct:2,good:'Correct. Stop goes just below the entire support zone. Price must fully break the zone to invalidate your trade.',bad:'Stop should be at $97 — just below the entire zone. Stops inside the zone get hit by normal volatility.'}}
+  ];
+  function render(){
+    var m=modules[cur],total=modules.length;
+    var pct=Math.round((cur/total)*100);
+    gel('pa-pfil').style.width=pct+'%';gel('pa-pct').textContent=pct+'%';
+    gel('pa-prev').disabled=cur===0;gel('pa-prev').style.opacity=cur===0?'0.3':'1';
+    gel('pa-next').textContent=cur===total-1?'See Summary →':'Next →';
+    var bodyHTML=m.body.map(function(p){return'<p>'+p+'</p>';}).join('');
+    var rulesHTML=m.rules.map(function(r,i){return'<div class="rrow"><div class="rnum">'+(i+1)+'</div><div class="rtxt">'+r+'</div></div>';}).join('');
+    var optsHTML=m.quiz.opts.map(function(o,i){return'<button class="qopt" data-idx="'+i+'">'+o+'</button>';}).join('');
+    gel('pa-modwrap').innerHTML='<div class="modcrd fi"><div class="modnum">'+m.num+' OF '+total+'</div><div class="modtit">'+m.title+'</div><div class="modbod">'+bodyHTML+'</div><div class="cvwrap"><div class="cvlbl">VISUAL EXAMPLE</div><canvas id="cv0" width="300" height="155"></canvas></div><div class="truth-box"><div class="truth-lbl">✦ KEY TRUTH</div><div class="truth-txt">'+m.truth+'</div></div><div class="rwrap"><div class="rlbl">✓ RULES TO REMEMBER</div>'+rulesHTML+'</div><div class="warn-box">⚠️ <strong style="color:#b8950e;">Common mistake:</strong> '+m.warn+'</div><div class="qwrap"><div class="qwlbl">🧠 KNOWLEDGE CHECK</div><div class="quiz-q">'+m.quiz.q+'</div><div class="qwopts" id="pa-qopts">'+optsHTML+'</div><div class="qfb" id="pa-qfb"></div></div></div>';
+    setTimeout(function(){if(drawFns[cur])drawFns[cur]();},60);
+    var opts=gel('pa-qopts').querySelectorAll('.qopt');
+    opts.forEach(function(btn){btn.addEventListener('click',function(){handleAnswer(parseInt(btn.getAttribute('data-idx')));});});
+    if(answered[cur]){opts.forEach(function(o,i){o.disabled=true;if(i===m.quiz.correct)o.classList.add('correct');else o.classList.add('reveal');});}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function handleAnswer(idx){
+    if(answered[cur])return;
+    var m=modules[cur],opts=gel('pa-qopts').querySelectorAll('.qopt'),fb=gel('pa-qfb'),ok=idx===m.quiz.correct;
+    opts.forEach(function(o,i){o.disabled=true;if(i===m.quiz.correct)o.classList.add('correct');else if(i===idx&&!ok)o.classList.add('wrong');else o.classList.add('reveal');});
+    fb.textContent=ok?('✅ '+m.quiz.good):('❌ '+m.quiz.bad);
+    fb.className='qfb show '+(ok?'good':'bad');
+    if(ok&&!answered[cur])score++;
+    answered[cur]=true;
+  }
+  function showSummary(){
+    gel('pa-play').className='hidden';
+    var s=gel('pa-summary');s.className='fi';
+    var pct=Math.round((score/modules.length)*100);
+    var grade=pct===100?'🔥 Expert':pct>=66?'✅ Proficient':pct>=33?'📈 Developing':'🌱 Keep Studying';
+    var gc=pct===100?'#4ade80':pct>=66?'#818cf8':pct>=33?'#38bdf8':'#facc15';
+    var msg=pct===100?'Perfect. You understand Price Action at an intermediate level. Apply every concept on real charts.':pct>=66?'Solid understanding. Review the modules where you got the quiz wrong.':pct>=33?'Good foundation. Re-read each module carefully. Price Action takes repetition.':'Go through the playbook again slowly and look for each concept on real charts.';
+    var icons=['📍','🏗️','📈','💥','🎯','🛡️'];
+    var rowsHTML=modules.map(function(m,i){return'<div class="srrow"><div class="sricon">'+icons[i]+'</div><div><div class="srtit">'+m.title+'</div><div class="srdesc">'+m.truth+'</div></div></div>';}).join('');
+    s.innerHTML='<div style="text-align:center;margin-bottom:24px;"><div class="badge">PLAYBOOK COMPLETE</div><h2 style="font-size:24px;font-weight:900;background:linear-gradient(135deg,#c7d2fe,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0 6px;">Price Action Results</h2></div><div class="sumcrd" style="text-align:center;"><div class="scring" style="border-color:'+gc+';color:'+gc+';"><div>'+score+'/'+modules.length+'</div><div class="sclbl">SCORE</div></div><div style="font-size:17px;font-weight:800;color:'+gc+';margin-bottom:8px;">'+grade+'</div><div style="font-size:13px;color:var(--txd);line-height:1.7;max-width:360px;margin:0 auto;">'+msg+'</div></div><div class="sumcrd"><div style="font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--txf);margin-bottom:16px;">YOUR PRICE ACTION CHEATSHEET</div>'+rowsHTML+'</div><button class="btn-p" id="pa-restart">Restart Playbook →</button>';
+    gel('pa-restart').addEventListener('click',function(){cur=0;score=0;answered=new Array(modules.length).fill(false);gel('pa-summary').className='hidden';gel('pa-welcome').className='fi';});
+  }
+  gel('pa-start').addEventListener('click',function(){
+    gel('pa-welcome').className='hidden';gel('pa-play').className='fi';
+    answered=new Array(modules.length).fill(false);render();
+  });
+  gel('pa-prev').addEventListener('click',function(){if(cur>0){cur--;render();}});
+  gel('pa-next').addEventListener('click',function(){if(cur<modules.length-1){cur++;render();}else showSummary();});
+})();
+
+/* ══ INIT ══ */
+initGlobe();
+renderHubConcepts();
+</script>
+</body>
+</html>
