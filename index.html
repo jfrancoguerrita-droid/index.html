@@ -392,8 +392,8 @@ body{min-height:100vh;background:
 .tool-card::before{content:'';position:absolute;inset:-1px;border-radius:20px;background:linear-gradient(135deg,transparent,var(--accent-soft),transparent);opacity:0;transition:opacity .3s;z-index:-1}
 .tool-card:hover{border-color:var(--border-strong);transform:translateY(-4px);box-shadow:0 16px 48px rgba(62,255,161,.08)}
 .tool-card:hover::before{opacity:1}
-.tool-card.featured{grid-column:span 2}
-@media(max-width:560px){.tool-card.featured{grid-column:span 1}}
+.tool-card.featured{grid-column:span 1}
+
 .tool-icon{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,rgba(62,255,161,.15),rgba(62,255,161,.04));border:1px solid var(--border-strong);display:grid;place-items:center;margin-bottom:14px;color:var(--accent)}
 .tool-icon svg{width:22px;height:22px}
 .tool-name{font-size:17px;font-weight:600;margin-bottom:6px;color:var(--text);letter-spacing:-.3px}
@@ -654,13 +654,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 .ppill span{color:#3effa1;margin-right:4px;}
 .ppills{text-align:center;margin-bottom:24px;}
 .hidden{display:none;}
-@media(max-width:480px){.cp-grid{grid-template-columns:1fr 1fr;}.qopts-g{grid-template-columns:1fr;}.g2{grid-template-columns:1fr;}}
+@media(max-width:600px){.community-grid{grid-template-columns:1fr!important;}}@media(max-width:480px){.cp-grid{grid-template-columns:1fr 1fr;}.qopts-g{grid-template-columns:1fr;}.g2{grid-template-columns:1fr;}}
 
 /* INVEST big title */
 .hero-invest-big{font-family:'Space Grotesk',sans-serif;font-size:clamp(56px,14vw,120px);font-weight:700;letter-spacing:-4px;color:#fff;line-height:.9;margin-bottom:16px;}
 
 /* Mobile nav fix */
-@media(max-width:640px){
+@media(max-width:640px){.community-grid{grid-template-columns:1fr!important;}
   .nav{padding:14px 16px;}
   .nav-links .nav-link{display:none;}
   .tg-btn{padding:8px 12px;font-size:12px;}
@@ -671,7 +671,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   .hero-invest-big{font-size:clamp(52px,18vw,90px);}
   body{overflow-x:hidden;}
 }
-@media(max-width:480px){
+@media(max-width:600px){.community-grid{grid-template-columns:1fr!important;}}@media(max-width:480px){
   .tg-btn span.tg-label{display:none;}
 }
 </style>
@@ -788,11 +788,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
         <span class="tag free">FREE · INTERACTIVE</span>
         <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
       </div>
-      <svg class="tool-chart" viewBox="0 0 200 100" preserveAspectRatio="none">
-        <defs><linearGradient id="grA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3effa1" stop-opacity=".4"></stop><stop offset="100%" stop-color="#3effa1" stop-opacity="0"></stop></linearGradient></defs>
-        <path d="M0,90 Q50,85 80,70 T140,40 T200,15 L200,100 L0,100 Z" fill="url(#grA)"></path>
-        <path d="M0,90 Q50,85 80,70 T140,40 T200,15" stroke="#3effa1" stroke-width="2" fill="none"></path>
-      </svg>
+
     </a>
     <a class="tool-card" href="#" onclick="openTool('pos');return false;">
       <div class="tool-icon">
@@ -876,28 +872,42 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   </div>
 </section>
 
-<!-- TELEGRAM CTA -->
-<section class="tg-cta">
-  <div class="tg-card">
-    <div class="tg-icon">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"></path></svg>
+<!-- COMMUNITY CTA -->
+<section style="padding:60px 20px;max-width:900px;margin:0 auto;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="community-grid">
+
+    <!-- Telegram Card -->
+    <div class="tg-card" style="text-align:center;padding:32px 24px;position:relative;overflow:hidden;">
+      <div class="tg-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"></path></svg>
+      </div>
+      <h2 class="tg-h" style="font-size:18px;margin-bottom:8px;">Telegram Channel</h2>
+      <p class="tg-p" style="font-size:13px;margin-bottom:20px;">Weekly analysis and key level alerts. No spam. Only when it matters.</p>
+      <a class="tg-link" href="https://t.me/+EJbTFXViQXBlNDAx" target="_blank" style="position:relative;z-index:1;font-size:13px;padding:12px 20px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"></path></svg>
+        Join the channel
+      </a>
+      <div class="tg-meta" style="margin-top:14px;flex-wrap:wrap;gap:10px;">
+        <span>● Free</span><span>● No spam</span><span>● 2.4K</span>
+      </div>
     </div>
-    <h2 class="tg-h">Join the Telegram Channel</h2>
-    <p class="tg-p">Weekly analysis, key level alerts and commentary when markets get interesting. No spam. No hype. Only when it matters.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;">
-    <a class="tg-link" href="https://x.com/invest" target="_blank" style="background:#fff;color:#000;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      Follow on X
-    </a>
-    <a class="tg-link" href="https://t.me/+EJbTFXViQXBlNDAx" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"></path></svg>
-      Join the channel
-    </a>
-    <div class="tg-meta">
-      <span>● Free</span>
-      <span>● No spam</span>
-      <span>● 2.4K members</span>
+
+    <!-- X Card -->
+    <div class="tg-card" style="text-align:center;padding:32px 24px;position:relative;overflow:hidden;background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12);">
+      <div class="tg-icon" style="background:#000;border:1px solid rgba(255,255,255,.15);">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <h2 class="tg-h" style="font-size:18px;margin-bottom:8px;">Follow on X</h2>
+      <p class="tg-p" style="font-size:13px;margin-bottom:20px;">Daily market analysis and insights. The calm voice in a noisy market.</p>
+      <a href="https://x.com/invest" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:#fff;color:#000;border-radius:99px;font-weight:700;font-size:13px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.3);transition:transform .2s;position:relative;z-index:1;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @invest on X
+      </a>
+      <div class="tg-meta" style="margin-top:14px;flex-wrap:wrap;gap:10px;">
+        <span>● Daily posts</span><span>● Free</span><span>● 3K+</span>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -1555,13 +1565,13 @@ function quizRestart(){document.getElementById('quiz-result').style.display='non
     if(ok&&!answered[cur])score++;answered[cur]=true;
   }
   function showSummary(){
-    gel('pa-play').className='hidden';var s=gel('pa-summary');s.className='';
+    gel('pa-play').style.display='none';var s=gel('pa-summary');s.className='';
     var icons=['📍','🏗️','📈','💥','🎯','🛡️'];
     var rowsHTML=modules.map(function(m,i){return'<div class="srrow"><div style="font-size:18px;flex-shrink:0;margin-top:2px;">'+icons[i]+'</div><div><div class="srtit">'+m.title+'</div><div class="srdesc">'+m.truth+'</div></div></div>';}).join('');
     s.innerHTML='<div style="text-align:center;margin-bottom:24px;"><div class="ac-badge" style="margin-bottom:12px;">Playbook Complete</div><h2 style="font-size:24px;font-weight:700;color:#eaf2ee;margin-top:12px;">Price Action <span style="color:#3effa1;">Results</span></h2></div><div class="sumcrd" style="text-align:center;"><div class="scring"><div>'+score+'/'+modules.length+'</div><div class="sclbl">SCORE</div></div></div><div class="sumcrd"><div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:2.5px;color:#7d8a89;margin-bottom:16px;text-transform:uppercase;">Your Price Action Cheatsheet</div>'+rowsHTML+'</div><button class="btn-ac" id="pa-restart">Restart Playbook →</button>';
-    gel('pa-restart').addEventListener('click',function(){cur=0;score=0;answered=new Array(modules.length).fill(false);gel('pa-summary').className='hidden';gel('pa-welcome').style.display='block';});
+    gel('pa-restart').addEventListener('click',function(){cur=0;score=0;answered=new Array(modules.length).fill(false);gel('pa-summary').style.display='none';gel('pa-welcome').style.display='block';});
   }
-  gel('pa-start').addEventListener('click',function(){gel('pa-welcome').style.display='none';gel('pa-play').className='';answered=new Array(modules.length).fill(false);render();});
+  gel('pa-start').addEventListener('click',function(){gel('pa-welcome').style.display='none';gel('pa-play').style.display='block';answered=new Array(modules.length).fill(false);render();});
   gel('pa-prev').addEventListener('click',function(){if(cur>0){cur--;render();}});
   gel('pa-next').addEventListener('click',function(){if(cur<modules.length-1){cur++;render();}else showSummary();});
 })();
@@ -1871,6 +1881,63 @@ function drawMiniMountain(){
 }
 
 </script>
+
+<!-- ══ CANDLESTICK OVERLAY ══ -->
+<div class="tool-overlay" id="ov-cp">
+  <div class="ov-bar"><button class="ov-back" onclick="closeTool('cp')">← Back</button><div class="ov-lbl">CANDLESTICK PATTERNS</div></div>
+  <div class="ov-body"><div class="twrap">
+    <div id="cp-welcome">
+      <div style="text-align:center;padding:12px 0 24px;">
+        <div class="logo-ring">🕯️</div>
+        <div class="ac-badge">Pattern Library</div>
+        <h2 class="w-title" style="margin-top:12px;">Candlestick<br><span style="color:#3effa1;">Pattern Library</span></h2>
+        <p class="w-sub">Learn to read price action through candlestick patterns. Each pattern is drawn exactly as it appears on a real chart — with reliability scores and quizzes.</p>
+      </div>
+      <div class="gcrd" style="margin-bottom:20px;">
+        <div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:2px;color:#7d8a89;margin-bottom:12px;text-transform:uppercase;">What is a candlestick?</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <canvas id="cp-intro" width="60" height="100"></canvas>
+          <div style="font-size:12px;color:#b6c2c0;line-height:1.8;">Each candle shows <strong style="color:#eaf2ee;">4 prices</strong> in a period:<br>🔼 <strong style="color:#eaf2ee;">High</strong> — top of wick<br>🔽 <strong style="color:#eaf2ee;">Low</strong> — bottom of wick<br>🟢 <strong style="color:#3effa1;">Open/Close</strong> — the body<br>Green = price went up · Red = went down</div>
+        </div>
+      </div>
+      <div class="disc-box"><strong>⚠️ Note:</strong> Patterns are tools, not guarantees. Always confirm with volume and context.</div>
+      <button class="btn-ac" onclick="cpGallery('all')">Explore Patterns →</button>
+    </div>
+    <div id="cp-gallery" style="display:none;"></div>
+    <div id="cp-detail" style="display:none;"></div>
+  </div></div>
+</div>
+
+<!-- ══ PRICE ACTION OVERLAY ══ -->
+<div class="tool-overlay" id="ov-pa">
+  <div class="ov-bar"><button class="ov-back" onclick="closeTool('pa')">← Back</button><div class="ov-lbl">PRICE ACTION PLAYBOOK</div></div>
+  <div class="ov-body"><div class="twrap">
+    <div id="pa-welcome">
+      <div style="text-align:center;padding:12px 0 24px;">
+        <div class="logo-ring">📐</div>
+        <div class="ac-badge">6 Modules · Quizzes</div>
+        <h2 class="w-title" style="margin-top:12px;">Read the Market.<br><span style="color:#3effa1;">No Indicators Needed.</span></h2>
+        <p class="w-sub">6 core concepts every serious trader must master. Canvas visuals, rules and quizzes included.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px;">
+        <div class="ppill"><span>01</span>Support &amp; Resistance</div>
+        <div class="ppill"><span>02</span>Market Structure</div>
+        <div class="ppill"><span>03</span>Trend Analysis</div>
+        <div class="ppill"><span>04</span>Break &amp; Retest</div>
+        <div class="ppill"><span>05</span>Entry Refinement</div>
+        <div class="ppill"><span>06</span>Stop Loss Placement</div>
+      </div>
+      <div class="disc-box">⚠️ Price Action concepts increase probability — they do not guarantee outcomes. Always manage risk.</div>
+      <button class="btn-ac" id="pa-start">Start Playbook →</button>
+    </div>
+    <div id="pa-play" style="display:none;">
+      <div class="progwrap"><div class="progtop"><div class="proglbl">Price Action Playbook</div><div class="progpct" id="pa-pct">0%</div></div><div class="progbg"><div class="progfil" id="pa-pfil" style="width:0%"></div></div></div>
+      <div id="pa-modwrap"></div>
+      <div class="panav"><button class="btnav bprev" id="pa-prev">← Back</button><button class="btnav bnext" id="pa-next">Next →</button></div>
+    </div>
+    <div id="pa-summary" style="display:none;"></div>
+  </div></div>
+</div>
 
 <!-- CONCEPT MODAL -->
 <div class="movl" id="modal" onclick="if(event.target===this)modalCloseDirect()">
