@@ -1569,11 +1569,16 @@ function quizRestart(){document.getElementById('quiz-result').style.display='non
     var icons=['📍','🏗️','📈','💥','🎯','🛡️'];
     var rowsHTML=modules.map(function(m,i){return'<div class="srrow"><div style="font-size:18px;flex-shrink:0;margin-top:2px;">'+icons[i]+'</div><div><div class="srtit">'+m.title+'</div><div class="srdesc">'+m.truth+'</div></div></div>';}).join('');
     s.innerHTML='<div style="text-align:center;margin-bottom:24px;"><div class="ac-badge" style="margin-bottom:12px;">Playbook Complete</div><h2 style="font-size:24px;font-weight:700;color:#eaf2ee;margin-top:12px;">Price Action <span style="color:#3effa1;">Results</span></h2></div><div class="sumcrd" style="text-align:center;"><div class="scring"><div>'+score+'/'+modules.length+'</div><div class="sclbl">SCORE</div></div></div><div class="sumcrd"><div style="font-family:monospace;font-size:10px;font-weight:700;letter-spacing:2.5px;color:#7d8a89;margin-bottom:16px;text-transform:uppercase;">Your Price Action Cheatsheet</div>'+rowsHTML+'</div><button class="btn-ac" id="pa-restart">Restart Playbook →</button>';
-    gel('pa-restart').addEventListener('click',function(){cur=0;score=0;answered=new Array(modules.length).fill(false);gel('pa-summary').style.display='none';gel('pa-welcome').style.display='block';});
+    // pa-restart handled via document delegation
   }
-  gel('pa-start').addEventListener('click',function(){gel('pa-welcome').style.display='none';gel('pa-play').style.display='block';answered=new Array(modules.length).fill(false);render();});
-  gel('pa-prev').addEventListener('click',function(){if(cur>0){cur--;render();}});
-  gel('pa-next').addEventListener('click',function(){if(cur<modules.length-1){cur++;render();}else showSummary();});
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[id]');
+    if(!t)return;
+    if(t.id==='pa-start'){gel('pa-welcome').style.display='none';gel('pa-play').style.display='block';answered=new Array(modules.length).fill(false);render();}
+    if(t.id==='pa-prev'){if(cur>0){cur--;render();}}
+    if(t.id==='pa-next'){if(cur<modules.length-1){cur++;render();}else showSummary();}
+    if(t.id==='pa-restart'){cur=0;score=0;answered=new Array(modules.length).fill(false);gel('pa-summary').style.display='none';gel('pa-welcome').style.display='block';}
+  });
 })();
 
 
