@@ -694,8 +694,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 
 
 
-.lc-skip{font-size:11px;color:#4a5a55;margin-top:14px;cursor:pointer;text-decoration:underline;display:block;}
-.lc-skip:hover{color:#7d8a89;}
+
+
 .lc-disc{font-size:10px;color:#3a4a44;margin-top:12px;line-height:1.6;}
 .lc-success{display:none;flex-direction:column;align-items:center;gap:12px;}
 .lc-success-icon{font-size:40px;}
@@ -2013,7 +2013,6 @@ function drawMiniMountain(){
         <input class="lc-input" type="text" id="lc-name" placeholder="First name (optional)" autocomplete="given-name">
         <button class="lc-btn" onclick="lcSubmit()">Get free access →</button>
       </div>
-      <span class="lc-skip" onclick="lcSkip()">Skip for now</span>
       <p class="lc-disc">No credit card. No spam. Unsubscribe anytime.</p>
     </div>
     <div class="lc-success" id="lc-success">
@@ -2067,13 +2066,6 @@ function drawMiniMountain(){
     lcSendToSheet(email,name,src);
     lcShowSuccess();
   };
-  window.lcSkip=function(){
-    localStorage.setItem('inv_lead','skip');
-    document.getElementById('lc-overlay').classList.add('lc-hidden');
-    document.body.style.overflow='';
-    if(window._pendingTool){_doOpenTool(window._pendingTool);window._pendingTool=null;}
-  };
-
   document.addEventListener('keydown',function(e){
     if(e.key==='Enter'&&document.activeElement&&document.activeElement.id==='lc-email'){window.lcSubmit();}
   });
