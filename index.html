@@ -2051,11 +2051,11 @@ function drawMiniMountain(){
     },1400);
   }
 
-  function lcSendToN8N(email,name,source){
+  function lcSendToSheet(email,name,source){
     try{
-      fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email:email,name:name||'',source:source,ts:new Date().toISOString()})
-      });
+      var url=SHEET_URL+'&email='+encodeURIComponent(email)+'&name='+encodeURIComponent(name||'')+'&source='+encodeURIComponent(source||'direct');
+      var img=new Image();
+      img.src=url;
     }catch(e){}
   }
 
@@ -2069,7 +2069,7 @@ function drawMiniMountain(){
     }
     var src=getRef();
     localStorage.setItem('inv_lead',JSON.stringify({email:email,name:name,source:src,ts:Date.now()}));
-    lcSendToN8N(email,name,src);
+    lcSendToSheet(email,name,src);
     lcShowSuccess();
   };
 
@@ -2078,7 +2078,7 @@ function drawMiniMountain(){
     if(!email||!email.includes('@'))return;
     var src=getRef();
     localStorage.setItem('inv_lead',JSON.stringify({email:email,name:'',source:src,ts:Date.now()}));
-    lcSendToN8N(email,'',src);
+    lcSendToSheet(email,'',src);
     lcShowSuccess();
   };
 
