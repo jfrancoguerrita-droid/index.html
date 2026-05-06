@@ -674,6 +674,33 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 @media(max-width:600px){.community-grid{grid-template-columns:1fr!important;}}@media(max-width:480px){
   .tg-btn span.tg-label{display:none;}
 }
+/* ══ LEAD CAPTURE MODAL ══ */
+#lc-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;}
+#lc-overlay.lc-hidden{display:none;}
+#lc-box{background:#0d1a14;border:1px solid rgba(62,255,161,.18);border-radius:16px;padding:36px 32px;max-width:420px;width:100%;text-align:center;position:relative;}
+.lc-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;color:#3effa1;background:rgba(62,255,161,.1);border:1px solid rgba(62,255,161,.2);border-radius:99px;padding:4px 14px;margin-bottom:18px;text-transform:uppercase;}
+.lc-title{font-size:22px;font-weight:700;color:#eaf2ee;margin-bottom:8px;line-height:1.3;}
+.lc-sub{font-size:13px;color:#7d8a89;line-height:1.7;margin-bottom:24px;}
+.lc-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.lc-tool{font-size:11px;font-family:'JetBrains Mono',monospace;color:#b6c2c0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:4px 10px;}
+.lc-form{display:flex;flex-direction:column;gap:10px;}
+.lc-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 16px;font-size:14px;color:#eaf2ee;outline:none;transition:border-color .2s;font-family:inherit;}
+.lc-input:focus{border-color:rgba(62,255,161,.4);}
+.lc-input::placeholder{color:#4a5a55;}
+.lc-btn{background:#3effa1;color:#0a1a10;border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:inherit;width:100%;}
+.lc-btn:hover{opacity:.88;}
+.lc-divider{display:flex;align-items:center;gap:10px;margin:4px 0;}
+.lc-divider span{font-size:11px;color:#4a5a55;white-space:nowrap;}
+.lc-divider::before,.lc-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
+.lc-google{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px;font-size:13px;color:#eaf2ee;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s;font-family:inherit;width:100%;}
+.lc-google:hover{border-color:rgba(255,255,255,.25);}
+.lc-skip{font-size:11px;color:#4a5a55;margin-top:14px;cursor:pointer;text-decoration:underline;display:block;}
+.lc-skip:hover{color:#7d8a89;}
+.lc-disc{font-size:10px;color:#3a4a44;margin-top:12px;line-height:1.6;}
+.lc-success{display:none;flex-direction:column;align-items:center;gap:12px;}
+.lc-success-icon{font-size:40px;}
+.lc-success-title{font-size:18px;font-weight:700;color:#3effa1;}
+.lc-success-sub{font-size:13px;color:#7d8a89;}
 </style>
 </head>
 <body>
@@ -1361,6 +1388,15 @@ document.querySelectorAll('.section,.tg-cta').forEach(el=>io2.observe(el));
 <script>
 /* ══ OVERLAY SYSTEM ══ */
 function openTool(id){
+  if(!localStorage.getItem('inv_lead')){
+    window._pendingTool=id;
+    document.getElementById('lc-overlay').classList.remove('lc-hidden');
+    document.body.style.overflow='hidden';
+    return;
+  }
+  _doOpenTool(id);
+}
+function _doOpenTool(id){
   const ov=document.getElementById('ov-'+id);
   if(!ov)return;
   ov.classList.add('open');
@@ -1956,5 +1992,108 @@ function drawMiniMountain(){
     <div class="mex"><div class="mexlbl">Real Example</div><div class="mextxt" id="m-ex"></div></div>
   </div>
 </div>
+
+<!-- ══ LEAD CAPTURE MODAL ══ -->
+<div id="lc-overlay" class="lc-hidden">
+  <div id="lc-box">
+    <div id="lc-content">
+      <div class="lc-badge">Free Access</div>
+      <h2 class="lc-title">Unlock all tools.<br><span style="color:#3effa1;">Free, forever.</span></h2>
+      <p class="lc-sub">Enter your email to access all calculators, courses and the concept library. No spam — ever.</p>
+      <div class="lc-tools">
+        <span class="lc-tool">Position Calculator</span>
+        <span class="lc-tool">R/R Calculator</span>
+        <span class="lc-tool">Price Action</span>
+        <span class="lc-tool">Candlesticks</span>
+        <span class="lc-tool">Wealth Mountain</span>
+        <span class="lc-tool">40+ Concepts</span>
+      </div>
+      <div class="lc-form">
+        <button class="lc-google" onclick="lcGoogleSignIn()">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <div class="lc-divider"><span>or enter email manually</span></div>
+        <input class="lc-input" type="email" id="lc-email" placeholder="your@email.com" autocomplete="email">
+        <input class="lc-input" type="text" id="lc-name" placeholder="First name (optional)" autocomplete="given-name">
+        <button class="lc-btn" onclick="lcSubmit()">Get free access →</button>
+      </div>
+      <span class="lc-skip" onclick="lcSkip()">Skip for now</span>
+      <p class="lc-disc">No credit card. No spam. Unsubscribe anytime.</p>
+    </div>
+    <div class="lc-success" id="lc-success">
+      <div class="lc-success-icon">✅</div>
+      <div class="lc-success-title">You're in.</div>
+      <div class="lc-success-sub">Opening your tool now...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbyHwE_nGKAzkEiQKour8A3VaOFMb-WM94-TfcWgaihYEiU8-YJAmWW2rqzobyo7g8U/exec?secret=invest2026secure';
+
+  function getRef(){
+    var p=new URLSearchParams(window.location.search);
+    return p.get('ref')||p.get('utm_source')||'direct';
+  }
+
+  function lcShowSuccess(){
+    document.getElementById('lc-content').style.display='none';
+    var s=document.getElementById('lc-success');
+    s.style.display='flex';
+    setTimeout(function(){
+      document.getElementById('lc-overlay').classList.add('lc-hidden');
+      document.body.style.overflow='';
+      document.getElementById('lc-content').style.display='block';
+      s.style.display='none';
+      if(window._pendingTool){_doOpenTool(window._pendingTool);window._pendingTool=null;}
+    },1400);
+  }
+
+  function lcSendToN8N(email,name,source){
+    try{
+      fetch(SHEET_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:email,name:name||'',source:source,ts:new Date().toISOString()})
+      });
+    }catch(e){}
+  }
+
+  window.lcSubmit=function(){
+    var email=(document.getElementById('lc-email').value||'').trim();
+    var name=(document.getElementById('lc-name').value||'').trim();
+    if(!email||!email.includes('@')){
+      document.getElementById('lc-email').style.borderColor='rgba(255,91,110,.6)';
+      setTimeout(function(){document.getElementById('lc-email').style.borderColor='';},1500);
+      return;
+    }
+    var src=getRef();
+    localStorage.setItem('inv_lead',JSON.stringify({email:email,name:name,source:src,ts:Date.now()}));
+    lcSendToN8N(email,name,src);
+    lcShowSuccess();
+  };
+
+  window.lcGoogleSignIn=function(){
+    var email=prompt('Enter your Gmail address:');
+    if(!email||!email.includes('@'))return;
+    var src=getRef();
+    localStorage.setItem('inv_lead',JSON.stringify({email:email,name:'',source:src,ts:Date.now()}));
+    lcSendToN8N(email,'',src);
+    lcShowSuccess();
+  };
+
+  window.lcSkip=function(){
+    localStorage.setItem('inv_lead','skip');
+    document.getElementById('lc-overlay').classList.add('lc-hidden');
+    document.body.style.overflow='';
+    if(window._pendingTool){_doOpenTool(window._pendingTool);window._pendingTool=null;}
+  };
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&document.activeElement&&document.activeElement.id==='lc-email'){window.lcSubmit();}
+  });
+})();
+</script>
+
 </body>
 </html>
