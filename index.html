@@ -674,6 +674,39 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
 @media(max-width:600px){.community-grid{grid-template-columns:1fr!important;}}@media(max-width:480px){
   .tg-btn span.tg-label{display:none;}
 }
+/* ══ LEAD CAPTURE MODAL ══ */
+#lc-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;}
+#lc-overlay.lc-hidden{display:none;}
+#lc-box{background:#0d1a14;border:1px solid rgba(62,255,161,.18);border-radius:16px;padding:36px 32px;max-width:420px;width:100%;text-align:center;position:relative;}
+.lc-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;color:#3effa1;background:rgba(62,255,161,.1);border:1px solid rgba(62,255,161,.2);border-radius:99px;padding:4px 14px;margin-bottom:18px;text-transform:uppercase;}
+.lc-title{font-size:22px;font-weight:700;color:#eaf2ee;margin-bottom:8px;line-height:1.3;}
+.lc-sub{font-size:13px;color:#7d8a89;line-height:1.7;margin-bottom:24px;}
+.lc-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.lc-tool{font-size:11px;font-family:'JetBrains Mono',monospace;color:#b6c2c0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:4px 10px;}
+.lc-form{display:flex;flex-direction:column;gap:10px;}
+.lc-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 16px;font-size:14px;color:#eaf2ee;outline:none;transition:border-color .2s;font-family:inherit;}
+.lc-input:focus{border-color:rgba(62,255,161,.4);}
+.lc-input::placeholder{color:#4a5a55;}
+.lc-btn{background:#3effa1;color:#0a1a10;border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:inherit;width:100%;}
+.lc-btn:hover{opacity:.88;}
+
+
+
+
+
+
+
+.lc-disc{font-size:10px;color:#3a4a44;margin-top:12px;line-height:1.6;}
+.lc-consent{display:flex;align-items:flex-start;gap:10px;margin-top:4px;text-align:left;}
+.lc-consent input[type=checkbox]{margin-top:3px;accent-color:#3effa1;width:16px;height:16px;flex-shrink:0;cursor:pointer;}
+.lc-consent label{font-size:11px;color:#7d8a89;line-height:1.6;cursor:pointer;}
+.lc-consent label a{color:#3effa1;text-decoration:underline;}
+.lc-consent label a:hover{opacity:.8;}
+
+.lc-success{display:none;flex-direction:column;align-items:center;gap:12px;}
+.lc-success-icon{font-size:40px;}
+.lc-success-title{font-size:18px;font-weight:700;color:#3effa1;}
+.lc-success-sub{font-size:13px;color:#7d8a89;}
 </style>
 </head>
 <body>
@@ -1361,6 +1394,15 @@ document.querySelectorAll('.section,.tg-cta').forEach(el=>io2.observe(el));
 <script>
 /* ══ OVERLAY SYSTEM ══ */
 function openTool(id){
+  if(!localStorage.getItem('inv_lead')){
+    window._pendingTool=id;
+    document.getElementById('lc-overlay').classList.remove('lc-hidden');
+    document.body.style.overflow='hidden';
+    return;
+  }
+  _doOpenTool(id);
+}
+function _doOpenTool(id){
   const ov=document.getElementById('ov-'+id);
   if(!ov)return;
   ov.classList.add('open');
@@ -1956,5 +1998,95 @@ function drawMiniMountain(){
     <div class="mex"><div class="mexlbl">Real Example</div><div class="mextxt" id="m-ex"></div></div>
   </div>
 </div>
+
+<!-- ══ LEAD CAPTURE MODAL ══ -->
+<div id="lc-overlay" class="lc-hidden">
+  <div id="lc-box">
+    <div id="lc-content">
+      <div class="lc-badge">Free Access</div>
+      <h2 class="lc-title">Unlock all tools.<br><span style="color:#3effa1;">Free, forever.</span></h2>
+      <p class="lc-sub">Enter your email to access all calculators, courses and the concept library. No spam — ever.</p>
+      <div class="lc-tools">
+        <span class="lc-tool">Position Calculator</span>
+        <span class="lc-tool">R/R Calculator</span>
+        <span class="lc-tool">Price Action</span>
+        <span class="lc-tool">Candlesticks</span>
+        <span class="lc-tool">Wealth Mountain</span>
+        <span class="lc-tool">40+ Concepts</span>
+      </div>
+      <div class="lc-form">
+        <input class="lc-input" type="email" id="lc-email" placeholder="your@email.com" autocomplete="email">
+        <input class="lc-input" type="text" id="lc-name" placeholder="First name (optional)" autocomplete="given-name">
+        <div class="lc-consent">
+          <input type="checkbox" id="lc-consent-check">
+          <label for="lc-consent-check">I agree to receive educational content and offers from Invest Hub. I have read and accept the <a href="https://drive.google.com/file/d/1IU5mY4OMNPyrQj6tTeP-Biy5KAP_tTH-/view?usp=sharing" target="_blank">Privacy Policy</a>. I can unsubscribe at any time.</label>
+        </div>
+        <button class="lc-btn" onclick="lcSubmit()">Get free access →</button>
+      </div>
+      <p class="lc-disc">No credit card. No spam. Unsubscribe anytime.</p>
+    </div>
+    <div class="lc-success" id="lc-success">
+      <div class="lc-success-icon">✅</div>
+      <div class="lc-success-title">You're in.</div>
+      <div class="lc-success-sub">Opening your tool now...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbyHwE_nGKAzkEiQKour8A3VaOFMb-WM94-TfcWgaihYEiU8-YJAmWW2rqzobyo7g8U/exec?secret=invest2026secure';
+
+  function getRef(){
+    var p=new URLSearchParams(window.location.search);
+    return p.get('ref')||p.get('utm_source')||'direct';
+  }
+
+  function lcShowSuccess(){
+    document.getElementById('lc-content').style.display='none';
+    var s=document.getElementById('lc-success');
+    s.style.display='flex';
+    setTimeout(function(){
+      document.getElementById('lc-overlay').classList.add('lc-hidden');
+      document.body.style.overflow='';
+      document.getElementById('lc-content').style.display='block';
+      s.style.display='none';
+      if(window._pendingTool){_doOpenTool(window._pendingTool);window._pendingTool=null;}
+    },1400);
+  }
+
+  function lcSendToSheet(email,name,source){
+    try{
+      var url=SHEET_URL+'&email='+encodeURIComponent(email)+'&name='+encodeURIComponent(name||'')+'&source='+encodeURIComponent(source||'direct');
+      var img=new Image();
+      img.src=url;
+    }catch(e){}
+  }
+
+  window.lcSubmit=function(){
+    var email=(document.getElementById('lc-email').value||'').trim();
+    var name=(document.getElementById('lc-name').value||'').trim();
+    if(!email||!email.includes('@')){
+      document.getElementById('lc-email').style.borderColor='rgba(255,91,110,.6)';
+      setTimeout(function(){document.getElementById('lc-email').style.borderColor='';},1500);
+      return;
+    }
+    var consent=document.getElementById('lc-consent-check');
+    if(!consent||!consent.checked){
+      consent.style.outline='2px solid rgba(255,91,110,.6)';
+      setTimeout(function(){consent.style.outline='';},1500);
+      return;
+    }
+    var src=getRef();
+    localStorage.setItem('inv_lead',JSON.stringify({email:email,name:name,source:src,ts:Date.now()}));
+    lcSendToSheet(email,name,src);
+    lcShowSuccess();
+  };
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&document.activeElement&&document.activeElement.id==='lc-email'){window.lcSubmit();}
+  });
+})();
+</script>
+
 </body>
 </html>
